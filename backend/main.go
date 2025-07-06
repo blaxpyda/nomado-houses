@@ -93,4 +93,6 @@ func main() {
 
 	log.Printf("Server starting on port %s", port)
 	log.Fatal(http.ListenAndServe(":"+port, corsHandler))
+
+	log.Println("Server stopped")
 }
