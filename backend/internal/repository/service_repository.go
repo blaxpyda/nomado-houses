@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"nomado-houses/internal/logger"
 	"nomado-houses/internal/models"
 )
 
@@ -18,12 +19,13 @@ type ServiceRepository interface {
 
 // serviceRepository implements ServiceRepository
 type serviceRepository struct {
-	db *sql.DB
+	db     *sql.DB
+	logger *logger.Logger
 }
 
 // NewServiceRepository creates a new service repository
-func NewServiceRepository(db *sql.DB) ServiceRepository {
-	return &serviceRepository{db: db}
+func NewServiceRepository(db *sql.DB, logger *logger.Logger) ServiceRepository {
+	return &serviceRepository{db: db, logger: logger}
 }
 
 // GetAllServices retrieves all services

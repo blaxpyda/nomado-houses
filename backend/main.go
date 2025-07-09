@@ -7,6 +7,7 @@ import (
 
 	"nomado-houses/internal/database"
 	appHandlers "nomado-houses/internal/handlers"
+	"nomado-houses/internal/logger"
 	"nomado-houses/internal/repository"
 	"nomado-houses/internal/service"
 
@@ -15,11 +16,23 @@ import (
 	"github.com/joho/godotenv"
 )
 
+func initializeLogger() *logger.Logger {
+	logInstance, err := logger.NewLogger("logs/nomado.log")
+	if err != nil {
+		log.Fatal("Failed to initialize logger:", err)
+	}
+	return logInstance
+}
+
 func main() {
 	// Load environment variables
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, using system environment variables")
 	}
+
+	// Initialize logger
+	logInstance := initializeLogger()
+	defer logInstance.Close()
 
 	// Initialize database
 	if err := database.InitDB(); err != nil {
@@ -37,10 +50,10 @@ func main() {
 	}
 
 	// Initialize repositories
-	userRepo := repository.NewUserRepository(database.DB)
-	destinationRepo := repository.NewDestinationRepository(database.DB)
-	serviceRepo := repository.NewServiceRepository(database.DB)
-	bookingRepo := repository.NewBookingRepository(database.DB)
+	userRepo := repository.NewUserRepository(database.DB, logInstance)
+	destinationRepo := repository.NewDestinationRepository(database.DB, logInstance)
+	serviceRepo := repository.NewServiceRepository(database.DB, logInstance)
+	bookingRepo := repository.NewBookingRepository(database.DB, logInstance)
 
 	// Initialize services
 	authService := service.NewAuthService(userRepo)
@@ -49,10 +62,10 @@ func main() {
 	bookingService := service.NewBookingService(bookingRepo)
 
 	// Initialize handlers
-	authHandler := appHandlers.NewAuthHandler(authService)
-	destinationHandler := appHandlers.NewDestinationHandler(destinationService)
-	serviceHandler := appHandlers.NewServiceHandler(serviceService)
-	bookingHandler := appHandlers.NewBookingHandler(bookingService)
+	authHandler := appHandlers.NewAuthHandler(authService, logInstance)
+	destinationHandler := appHandlers.NewDestinationHandler(destinationService, logInstance)
+	serviceHandler := appHandlers.NewServiceHandler(serviceService, logInstance)
+	bookingHandler := appHandlers.NewBookingHandler(bookingService, logInstance)
 
 	// Setup routes
 	r := mux.NewRouter()
@@ -96,3 +109,5 @@ func main() {
 
 	log.Println("Server stopped")
 }
+
+

@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"nomado-houses/internal/logger"
 	"nomado-houses/internal/models"
 	"nomado-houses/internal/service"
 	"strconv"
@@ -13,11 +14,12 @@ import (
 // DestinationHandler handles destination requests
 type DestinationHandler struct {
 	destinationService service.DestinationService
+	logger              *logger.Logger
 }
 
 // NewDestinationHandler creates a new destination handler
-func NewDestinationHandler(destinationService service.DestinationService) *DestinationHandler {
-	return &DestinationHandler{destinationService: destinationService}
+func NewDestinationHandler(destinationService service.DestinationService, logger *logger.Logger) *DestinationHandler {
+	return &DestinationHandler{destinationService: destinationService, logger: logger}
 }
 
 // GetAllDestinations handles GET /api/destinations
@@ -60,11 +62,12 @@ func (h *DestinationHandler) GetDestinationByID(w http.ResponseWriter, r *http.R
 // ServiceHandler handles service requests
 type ServiceHandler struct {
 	serviceService service.ServiceService
+	logger         *logger.Logger
 }
 
 // NewServiceHandler creates a new service handler
-func NewServiceHandler(serviceService service.ServiceService) *ServiceHandler {
-	return &ServiceHandler{serviceService: serviceService}
+func NewServiceHandler(serviceService service.ServiceService, logger *logger.Logger) *ServiceHandler {
+	return &ServiceHandler{serviceService: serviceService, logger: logger}
 }
 
 // GetAllServices handles GET /api/services
@@ -117,11 +120,12 @@ func (h *ServiceHandler) GetServiceByID(w http.ResponseWriter, r *http.Request) 
 // BookingHandler handles booking requests
 type BookingHandler struct {
 	bookingService service.BookingService
+	logger         *logger.Logger
 }
 
 // NewBookingHandler creates a new booking handler
-func NewBookingHandler(bookingService service.BookingService) *BookingHandler {
-	return &BookingHandler{bookingService: bookingService}
+func NewBookingHandler(bookingService service.BookingService, logger *logger.Logger) *BookingHandler {
+	return &BookingHandler{bookingService: bookingService, logger: logger}
 }
 
 // CreateBooking handles POST /api/bookings

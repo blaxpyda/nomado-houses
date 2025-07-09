@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"nomado-houses/internal/logger"
 	"nomado-houses/internal/models"
 	"time"
 )
@@ -18,12 +19,13 @@ type UserRepository interface {
 
 // userRepository implements UserRepository
 type userRepository struct {
-	db *sql.DB
+	db     *sql.DB
+	logger *logger.Logger
 }
 
 // NewUserRepository creates a new user repository
-func NewUserRepository(db *sql.DB) UserRepository {
-	return &userRepository{db: db}
+func NewUserRepository(db *sql.DB, logger *logger.Logger) UserRepository {
+	return &userRepository{db: db, logger: logger}
 }
 
 // CreateUser creates a new user

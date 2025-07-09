@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"nomado-houses/internal/logger"
 	"nomado-houses/internal/models"
 )
 
@@ -17,12 +18,13 @@ type BookingRepository interface {
 
 // bookingRepository implements BookingRepository
 type bookingRepository struct {
-	db *sql.DB
+	db     *sql.DB
+	logger *logger.Logger
 }
 
 // NewBookingRepository creates a new booking repository
-func NewBookingRepository(db *sql.DB) BookingRepository {
-	return &bookingRepository{db: db}
+func NewBookingRepository(db *sql.DB, logger *logger.Logger) BookingRepository {
+	return &bookingRepository{db: db, logger: logger}
 }
 
 // CreateBooking creates a new booking

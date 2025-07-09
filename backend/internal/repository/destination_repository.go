@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"nomado-houses/internal/logger"
 	"nomado-houses/internal/models"
 )
 
@@ -18,11 +19,12 @@ type DestinationRepository interface {
 // destinationRepository implements DestinationRepository
 type destinationRepository struct {
 	db *sql.DB
+	logger *logger.Logger
 }
 
 // NewDestinationRepository creates a new destination repository
-func NewDestinationRepository(db *sql.DB) DestinationRepository {
-	return &destinationRepository{db: db}
+func NewDestinationRepository(db *sql.DB, logger *logger.Logger) DestinationRepository {
+	return &destinationRepository{db: db, logger: logger}
 }
 
 // GetAllDestinations retrieves all destinations

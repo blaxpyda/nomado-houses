@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"nomado-houses/internal/logger"
 	"nomado-houses/internal/models"
 	"nomado-houses/internal/service"
 	"strings"
@@ -12,11 +13,12 @@ import (
 // AuthHandler handles authentication requests
 type AuthHandler struct {
 	authService service.AuthService
+	logger      *logger.Logger
 }
 
 // NewAuthHandler creates a new auth handler
-func NewAuthHandler(authService service.AuthService) *AuthHandler {
-	return &AuthHandler{authService: authService}
+func NewAuthHandler(authService service.AuthService, logger *logger.Logger) *AuthHandler {
+	return &AuthHandler{authService: authService, logger: logger}
 }
 
 // Register handles user registration
