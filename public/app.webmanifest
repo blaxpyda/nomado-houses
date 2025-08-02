@@ -1,0 +1,8 @@
+{
+    "name": "nomado",
+    "short_name": "Nomado",
+    "theme_color": "#ffffff",
+    "display": "browser",
+    "background_color": "#ffffff",
+    "description": "Nomado Global Adventures Frontend - Vanilla JavaScript"
+}

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"nomado-houses/internal/logger"
 	"nomado-houses/internal/models"
-	"time"
 )
 
 // UserRepository interface defines methods for user operations
@@ -31,18 +30,15 @@ func NewUserRepository(db *sql.DB, logger *logger.Logger) UserRepository {
 // CreateUser creates a new user
 func (r *userRepository) CreateUser(user *models.User) error {
 	query := `
-		INSERT INTO users (email, password, first_name, last_name, phone, created_at, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		INSERT INTO users (email, password, first_name, last_name, phone)
+		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id`
 
-	now := time.Now()
-	err := r.db.QueryRow(query, user.Email, user.Password, user.FirstName, user.LastName, user.Phone, now, now).Scan(&user.ID)
+	
+	err := r.db.QueryRow(query, user.Email, user.Password, user.FirstName, user.LastName, user.Phone).Scan(&user.ID)
 	if err != nil {
 		return fmt.Errorf("failed to create user: %w", err)
 	}
-
-	user.CreatedAt = now
-	user.UpdatedAt = now
 	return nil
 }
 
@@ -50,13 +46,12 @@ func (r *userRepository) CreateUser(user *models.User) error {
 func (r *userRepository) GetUserByEmail(email string) (*models.User, error) {
 	user := &models.User{}
 	query := `
-		SELECT id, email, password, first_name, last_name, phone, created_at, updated_at
+		SELECT id, email, password, first_name, last_name, phone
 		FROM users WHERE email = $1`
 
 	err := r.db.QueryRow(query, email).Scan(
 		&user.ID, &user.Email, &user.Password, &user.FirstName,
-		&user.LastName, &user.Phone, &user.CreatedAt, &user.UpdatedAt,
-	)
+		&user.LastName, &user.Phone)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("user not found")
@@ -71,13 +66,12 @@ func (r *userRepository) GetUserByEmail(email string) (*models.User, error) {
 func (r *userRepository) GetUserByID(id int) (*models.User, error) {
 	user := &models.User{}
 	query := `
-		SELECT id, email, password, first_name, last_name, phone, created_at, updated_at
+		SELECT id, email, password, first_name, last_name, phone 
 		FROM users WHERE id = $1`
 
 	err := r.db.QueryRow(query, id).Scan(
 		&user.ID, &user.Email, &user.Password, &user.FirstName,
-		&user.LastName, &user.Phone, &user.CreatedAt, &user.UpdatedAt,
-	)
+		&user.LastName, &user.Phone)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("user not found")
@@ -92,16 +86,12 @@ func (r *userRepository) GetUserByID(id int) (*models.User, error) {
 func (r *userRepository) UpdateUser(user *models.User) error {
 	query := `
 		UPDATE users 
-		SET first_name = $1, last_name = $2, phone = $3, updated_at = $4
-		WHERE id = $5`
-
-	now := time.Now()
-	_, err := r.db.Exec(query, user.FirstName, user.LastName, user.Phone, now, user.ID)
+		SET first_name = $1, last_name = $2, phone = $3
+		WHERE id = $4`
+	_, err := r.db.Exec(query, user.FirstName, user.LastName, user.Phone, user.ID)
 	if err != nil {
 		return fmt.Errorf("failed to update user: %w", err)
 	}
-
-	user.UpdatedAt = now
 	return nil
 }
 

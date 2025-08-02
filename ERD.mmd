@@ -1,0 +1,67 @@
+erDiagram
+    USER {
+        string user_id PK
+        string name
+        string email
+        string password
+        string contact_info
+    }
+    PROVIDER {
+        string provider_id PK
+        string name
+        string contact_info
+        string location
+    }
+    SERVICETYPE {
+        string service_type_id PK
+        string type_name
+    }
+    SERVICE {
+        string service_id PK
+        string provider_id FK
+        string service_type_id FK
+        string name
+        string description
+        float price
+        string availability
+    }
+    CARRENTALDETAILS {
+        string service_id PK
+        string service_id FK
+        string car_make
+        string car_model
+        string pickup_location
+        string dropoff_location
+        float daily_rate
+    }
+    HOUSEBOOKINGDETAILS {
+        string service_id PK
+        string service_id FK
+        string property_address
+        int number_of_rooms
+        string amenities
+        float nightly_rate
+    }
+    BOOKING {
+        string booking_id PK
+        string user_id FK
+        string service_id FK
+        date booking_date
+        date start_date
+        date end_date
+        string status
+    }
+    PAYMENT {
+        string payment_id PK
+        string booking_id FK
+        float amount
+        string payment_method
+        string transaction_status
+    }
+    USER ||--o{ BOOKING : has
+    PROVIDER ||--o{ SERVICE : offers
+    SERVICETYPE ||--o{ SERVICE : categorizes
+    SERVICE ||--o{ CARRENTALDETAILS : has_car_details
+    SERVICE ||--o{ HOUSEBOOKINGDETAILS : has_house_details
+    SERVICE ||--o{ BOOKING : is_booked_by
+    BOOKING ||--o{ PAYMENT : has_payments

@@ -6,70 +6,71 @@ import (
 
 // User represents a user in the system
 type User struct {
-	ID        int       `json:"id" db:"id"`
-	Email     string    `json:"email" db:"email"`
-	Password  string    `json:"-" db:"password"`
-	FirstName string    `json:"first_name" db:"first_name"`
-	LastName  string    `json:"last_name" db:"last_name"`
-	Phone     string    `json:"phone" db:"phone"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID        int    `json:"id" db:"id"`
+	Email     string `json:"email" db:"email"`
+	Password  string `json:"-" db:"password"`
+	FirstName string `json:"first_name" db:"first_name"`
+	LastName  string `json:"last_name" db:"last_name"`
+	Phone     string `json:"phone" db:"phone"`
 }
 
-// Destination represents a travel destination
-type Destination struct {
-	ID          int       `json:"id" db:"id"`
-	Name        string    `json:"name" db:"name"`
-	Country     string    `json:"country" db:"country"`
-	City        string    `json:"city" db:"city"`
-	Description string    `json:"description" db:"description"`
-	ImageURL    string    `json:"image_url" db:"image_url"`
-	Rating      float64   `json:"rating" db:"rating"`
-	DealsCount  int       `json:"deals_count" db:"deals_count"`
-	CreatedAt   time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
-}
-
-// Hotel represents a hotel accommodation
-type Hotel struct {
+// Service represents a category of services offered by the platform
+type Service struct {
 	ID            int       `json:"id" db:"id"`
+	ProviderID    int       `json:"provider_id" db:"provider_id"`
+	ServiceTypeID int       `json:"service_type_id" db:"service_type_id"`
 	Name          string    `json:"name" db:"name"`
-	DestinationID int       `json:"destination_id" db:"destination_id"`
-	Address       string    `json:"address" db:"address"`
 	Description   string    `json:"description" db:"description"`
-	ImageURL      string    `json:"image_url" db:"image_url"`
-	Rating        float64   `json:"rating" db:"rating"`
-	PricePerNight float64   `json:"price_per_night" db:"price_per_night"`
-	Amenities     string    `json:"amenities" db:"amenities"`
+	Price         float64   `json:"price" db:"price"`
+	Availability  bool      `json:"availability" db:"availability"`
 	CreatedAt     time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at" db:"updated_at"`
 }
 
-// Service represents a travel service
-type Service struct {
+// ServiceType represents a type of service offered by the platform
+type ServiceType struct {
+	ID          int    `json:"id" db:"id"`
+	Name        string `json:"name" db:"name"`
+	Description string `json:"description" db:"description"`
+}
+
+// Booking represents a booking made by a user for any services offered by the platform
+type Booking struct {
+	ID               int       `json:"id" db:"id"`
+	UserID           int       `json:"user_id" db:"user_id"`
+	ServiceID        int       `json:"service_id" db:"service_id"`
+	ProviderID       int       `json:"provider_id" db:"provider_id"`
+	BookingDateStart time.Time `json:"booking_date_start" db:"booking_date_start"`
+	BookingDateEnd   time.Time `json:"booking_date_end" db:"booking_date_end"`
+	TotalPrice       float64   `json:"total_price" db:"total_price"`
+	Status           string    `json:"status" db:"status"`
+	CreatedAt        time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at" db:"updated_at"`
+}
+
+// Payment represents a payment made by a user for a booking
+type Payment struct {
+	ID            int       `json:"id" db:"id"`
+	UserID        int       `json:"user_id" db:"user_id"`
+	BookingID     int       `json:"booking_id" db:"booking_id"`
+	Amount        float64   `json:"amount" db:"amount"`
+	PaymentDate   time.Time `json:"payment_date" db:"payment_date"`
+	PaymentMethod string    `json:"payment_method" db:"payment_method"`
+	Status        bool      `json:"status" db:"status"`
+	CreatedAt     time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at" db:"updated_at"`
+}
+
+// Destination represents a destination for travel or service
+type Destination struct {
 	ID          int       `json:"id" db:"id"`
 	Name        string    `json:"name" db:"name"`
-	Category    string    `json:"category" db:"category"`
 	Description string    `json:"description" db:"description"`
-	ImageURL    string    `json:"image_url" db:"image_url"`
-	IsActive    bool      `json:"is_active" db:"is_active"`
+	Location    string    `json:"location" db:"location"`
 	CreatedAt   time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
 }
 
-// Booking represents a booking made by a user
-type Booking struct {
-	ID           int       `json:"id" db:"id"`
-	UserID       int       `json:"user_id" db:"user_id"`
-	ServiceType  string    `json:"service_type" db:"service_type"`
-	ServiceID    int       `json:"service_id" db:"service_id"`
-	CheckInDate  time.Time `json:"check_in_date" db:"check_in_date"`
-	CheckOutDate time.Time `json:"check_out_date" db:"check_out_date"`
-	TotalAmount  float64   `json:"total_amount" db:"total_amount"`
-	Status       string    `json:"status" db:"status"`
-	CreatedAt    time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at" db:"updated_at"`
-}
 
 // LoginRequest represents the login request payload
 type LoginRequest struct {
@@ -104,4 +105,64 @@ type ErrorResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 	Error   string `json:"error,omitempty"`
+}
+
+// CreateDestinationRequest represents the request to create a destination
+type CreateDestinationRequest struct {
+	Name        string `json:"name" validate:"required"`
+	Description string `json:"description" validate:"required"`
+	Location    string `json:"location" validate:"required"`
+}
+
+// UpdateDestinationRequest represents the request to update a destination
+type UpdateDestinationRequest struct {
+	Name        string `json:"name" validate:"required"`
+	Description string `json:"description" validate:"required"`
+	Location    string `json:"location" validate:"required"`
+}
+
+// CreateServiceRequest represents the request to create a service
+type CreateServiceRequest struct {
+	ProviderID    int     `json:"provider_id" validate:"required"`
+	ServiceTypeID int     `json:"service_type_id" validate:"required"`
+	Name          string  `json:"name" validate:"required"`
+	Description   string  `json:"description" validate:"required"`
+	Price         float64 `json:"price" validate:"required,gt=0"`
+	Availability  bool    `json:"availability"`
+}
+
+// UpdateServiceRequest represents the request to update a service
+type UpdateServiceRequest struct {
+	ProviderID    int     `json:"provider_id" validate:"required"`
+	ServiceTypeID int     `json:"service_type_id" validate:"required"`
+	Name          string  `json:"name" validate:"required"`
+	Description   string  `json:"description" validate:"required"`
+	Price         float64 `json:"price" validate:"required,gt=0"`
+	Availability  bool    `json:"availability"`
+}
+
+// CreateServiceTypeRequest represents the request to create a service type
+type CreateServiceTypeRequest struct {
+	Name        string `json:"name" validate:"required"`
+	Description string `json:"description" validate:"required"`
+}
+
+// UpdateServiceTypeRequest represents the request to update a service type
+type UpdateServiceTypeRequest struct {
+	Name        string `json:"name" validate:"required"`
+	Description string `json:"description" validate:"required"`
+}
+
+// CreateBookingRequest represents the request to create a booking
+type CreateBookingRequest struct {
+	ServiceID        int       `json:"service_id" validate:"required"`
+	ProviderID       int       `json:"provider_id" validate:"required"`
+	BookingDateStart time.Time `json:"booking_date_start" validate:"required"`
+	BookingDateEnd   time.Time `json:"booking_date_end" validate:"required"`
+	TotalPrice       float64   `json:"total_price" validate:"required,gt=0"`
+}
+
+// UpdateBookingStatusRequest represents the request to update booking status
+type UpdateBookingStatusRequest struct {
+	Status string `json:"status" validate:"required,oneof=pending confirmed cancelled completed"`
 }

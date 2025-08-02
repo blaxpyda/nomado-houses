@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nomado Houses</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="app.webmanifest">
+    <link rel="icon" href="images/icon.png">
+    <script src="app.js" type="module" defer></script>
+</head>
+<body>
+    <header>
+        <h1><img src="images/logo.png" height="35" alt="Nomado Logo"></h1>
+        <nav>
+            <ul>
+                <li><a class="navlink" href="/">Home</a></li>
+                <li><a class="navlink" href="/services">Services</a></li>
+                <li><a class="navlink" href="/about">About</a></li>
+                <li><a class="navlink" href="/account">My Account</a></li>
+
+            </ul>
+        </nav>
+        <div>
+            <form>
+                <button type="button" onclick="location.href='/register'">Register</button>
+                <button type="button" onclick="location.href='/login'">Login</button>
+            </form>
+        </div>
+    </header>
+    <main>
+        <home-page></home-page>
+    </main>
+
+    <!-- Templates-->
+     <template id="template-home">
+        <section class="vertical-scroll" id="random">
+            <h2>Something to watch today!</h2>
+            <ul>
+                
+            </ul>
+        </section>
+     </template>
+    <footer>
+        <p>&copy; 2023 Nomado Global Adventures</p>
+        <p>Follow us on <a href="https://twitter.com/nomado">Twitter</a> and <a href="https://facebook.com/nomado">Facebook</a></p>
+    </footer>
+</body>
+</html>

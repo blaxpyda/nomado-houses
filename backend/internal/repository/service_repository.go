@@ -10,6 +10,7 @@ import (
 // ServiceRepository interface defines methods for service operations
 type ServiceRepository interface {
 	GetAllServices() ([]models.Service, error)
+	GetServicesByServiceType(serviceTypeID int) ([]models.Service, error)
 	GetServicesByCategory(category string) ([]models.Service, error)
 	GetServiceByID(id int) (*models.Service, error)
 	CreateService(service *models.Service) error
@@ -31,10 +32,10 @@ func NewServiceRepository(db *sql.DB, logger *logger.Logger) ServiceRepository {
 // GetAllServices retrieves all services
 func (r *serviceRepository) GetAllServices() ([]models.Service, error) {
 	query := `
-		SELECT id, name, category, description, image_url, is_active, created_at, updated_at
+		SELECT id, provider_id, service_type_id, name, description, price, availability, created_at, updated_at
 		FROM services
-		WHERE is_active = true
-		ORDER BY category, name`
+		WHERE availability = true
+		ORDER BY name`
 
 	rows, err := r.db.Query(query)
 	if err != nil {
@@ -46,8 +47,8 @@ func (r *serviceRepository) GetAllServices() ([]models.Service, error) {
 	for rows.Next() {
 		var service models.Service
 		err := rows.Scan(
-			&service.ID, &service.Name, &service.Category,
-			&service.Description, &service.ImageURL, &service.IsActive,
+			&service.ID, &service.ProviderID, &service.ServiceTypeID,
+			&service.Name, &service.Description, &service.Price, &service.Availability,
 			&service.CreatedAt, &service.UpdatedAt,
 		)
 		if err != nil {
@@ -59,13 +60,45 @@ func (r *serviceRepository) GetAllServices() ([]models.Service, error) {
 	return services, nil
 }
 
-// GetServicesByCategory retrieves services by category
+// GetServicesByServiceType retrieves services by service type
+func (r *serviceRepository) GetServicesByServiceType(serviceTypeID int) ([]models.Service, error) {
+	query := `
+		SELECT id, provider_id, service_type_id, name, description, price, availability, created_at, updated_at
+		FROM services
+		WHERE service_type_id = $1 AND availability = true
+		ORDER BY name`
+
+	rows, err := r.db.Query(query, serviceTypeID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get services by service type: %w", err)
+	}
+	defer rows.Close()
+
+	var services []models.Service
+	for rows.Next() {
+		var service models.Service
+		err := rows.Scan(
+			&service.ID, &service.ProviderID, &service.ServiceTypeID,
+			&service.Name, &service.Description, &service.Price, &service.Availability,
+			&service.CreatedAt, &service.UpdatedAt,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan service: %w", err)
+		}
+		services = append(services, service)
+	}
+
+	return services, nil
+}
+
+// GetServicesByCategory retrieves services by category name
 func (r *serviceRepository) GetServicesByCategory(category string) ([]models.Service, error) {
 	query := `
-		SELECT id, name, category, description, image_url, is_active, created_at, updated_at
-		FROM services
-		WHERE category = $1 AND is_active = true
-		ORDER BY name`
+		SELECT s.id, s.provider_id, s.service_type_id, s.name, s.description, s.price, s.availability, s.created_at, s.updated_at
+		FROM services s
+		JOIN service_types st ON s.service_type_id = st.id
+		WHERE st.name = $1 AND s.availability = true
+		ORDER BY s.name`
 
 	rows, err := r.db.Query(query, category)
 	if err != nil {
@@ -77,8 +110,8 @@ func (r *serviceRepository) GetServicesByCategory(category string) ([]models.Ser
 	for rows.Next() {
 		var service models.Service
 		err := rows.Scan(
-			&service.ID, &service.Name, &service.Category,
-			&service.Description, &service.ImageURL, &service.IsActive,
+			&service.ID, &service.ProviderID, &service.ServiceTypeID,
+			&service.Name, &service.Description, &service.Price, &service.Availability,
 			&service.CreatedAt, &service.UpdatedAt,
 		)
 		if err != nil {
@@ -94,12 +127,12 @@ func (r *serviceRepository) GetServicesByCategory(category string) ([]models.Ser
 func (r *serviceRepository) GetServiceByID(id int) (*models.Service, error) {
 	service := &models.Service{}
 	query := `
-		SELECT id, name, category, description, image_url, is_active, created_at, updated_at
+		SELECT id, provider_id, service_type_id, name, description, price, availability, created_at, updated_at
 		FROM services WHERE id = $1`
 
 	err := r.db.QueryRow(query, id).Scan(
-		&service.ID, &service.Name, &service.Category,
-		&service.Description, &service.ImageURL, &service.IsActive,
+		&service.ID, &service.ProviderID, &service.ServiceTypeID,
+		&service.Name, &service.Description, &service.Price, &service.Availability,
 		&service.CreatedAt, &service.UpdatedAt,
 	)
 	if err != nil {
@@ -115,12 +148,12 @@ func (r *serviceRepository) GetServiceByID(id int) (*models.Service, error) {
 // CreateService creates a new service
 func (r *serviceRepository) CreateService(service *models.Service) error {
 	query := `
-		INSERT INTO services (name, category, description, image_url, is_active)
-		VALUES ($1, $2, $3, $4, $5)
+		INSERT INTO services (provider_id, service_type_id, name, description, price, availability)
+		VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING id, created_at, updated_at`
 
-	err := r.db.QueryRow(query, service.Name, service.Category,
-		service.Description, service.ImageURL, service.IsActive).Scan(
+	err := r.db.QueryRow(query, service.ProviderID, service.ServiceTypeID,
+		service.Name, service.Description, service.Price, service.Availability).Scan(
 		&service.ID, &service.CreatedAt, &service.UpdatedAt,
 	)
 	if err != nil {
@@ -134,15 +167,14 @@ func (r *serviceRepository) CreateService(service *models.Service) error {
 func (r *serviceRepository) UpdateService(service *models.Service) error {
 	query := `
 		UPDATE services 
-		SET name = $1, category = $2, description = $3, image_url = $4, is_active = $5, updated_at = CURRENT_TIMESTAMP
-		WHERE id = $6`
+		SET provider_id = $1, service_type_id = $2, name = $3, description = $4, price = $5, availability = $6, updated_at = CURRENT_TIMESTAMP
+		WHERE id = $7`
 
-	_, err := r.db.Exec(query, service.Name, service.Category,
-		service.Description, service.ImageURL, service.IsActive, service.ID)
+	_, err := r.db.Exec(query, service.ProviderID, service.ServiceTypeID,
+		service.Name, service.Description, service.Price, service.Availability, service.ID)
 	if err != nil {
 		return fmt.Errorf("failed to update service: %w", err)
 	}
-
 	return nil
 }
 
