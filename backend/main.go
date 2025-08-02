@@ -126,7 +126,7 @@ func main() {
 	r.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
 	// Serve static files
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("../public/")))
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("../public")))
 
 	// Setup CORS
 	corsHandler := handlers.CORS(
