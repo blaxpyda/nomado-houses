@@ -11,13 +11,19 @@ CREATE TABLE IF NOT EXISTS service_types (
 -- These are sample service types for initial setup.
 INSERT INTO service_types (name, description)
 VALUES
-('Cleaning', 'Professional cleaning services for homes and offices.'),
-('Maintenance', 'General maintenance services for properties.'),
-('Landscaping', 'Landscaping and gardening services for outdoor spaces.'),
-('Security', 'Security services for residential and commercial properties.'),
-('Transportation', 'Transportation services including logistics and moving.'),
-('Catering', 'Catering services for events and gatherings.'),
-('IT Support', 'IT support services for businesses and individuals.'),
-('Consulting', 'Consulting services for business and personal needs.'),
-('Legal', 'Legal services including advice and representation.'),
-('Financial', 'Financial services including accounting and investment advice.');
+('Hotels & Guesthouses', 'Comfortable stays across Africa'),
+('Flights', 'International and regional flights'),
+('Bus Travel', 'Affordable intercity transportation.'),
+('Visa Assistance', 'Professional visa apllication help'),
+('Car Rental & Rides', 'Self-drive and chauffeur options'),
+('Nomado Love', 'Romantic getaways for couples'),
+('Little Nomads', 'Educational school trips'),
+('Events & Retreats', 'Transformative experiences'),
+('Nomado Jobs', 'International job placements'),
+('Nomado Shop', 'Travel gear and African souvenirs'),
+('Nomado Lux', 'Ultra-luxury travel experiences'),
+('Nomado Forex', 'Currency exchange and conversions'),
+('Nomado Eats', 'Local dining and food experiences'),
+('Events & Social Travel', 'Join travel groups and local events'),
+('eSIM & Translation', 'Stay connected and communicate'),
+('Nomado Logistics', 'Freight and delivery services');

@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+GANTT_CHART.pdf
+ERD.mmd
+API_DOCUMENTATION.md
+
+# Environment files (should be mounted separately)
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+backend/bin/
+backend/tmp/
+backend/main
+backend/server
+
+# Dependencies
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test files
+*_test.go
+backend/test_compile.go

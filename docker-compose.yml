@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=nomado_houses
+      - DB_USER=nomado
+      - DB_PASSWORD=nomado123
+      - DB_SSL_MODE=disable
+      - JWT_SECRET=your-jwt-secret-key-here
+      - PORT=8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      # Mount environment file (create .env from .env.example)
+      - ./backend/.env:/app/.env:ro
+      # Mount logs directory for persistence
+      - ./logs:/app/logs
+    networks:
+      - nomado-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=nomado_houses
+      - POSTGRES_USER=nomado
+      - POSTGRES_PASSWORD=nomado123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Mount migration files
+      - ./backend/internal/database/migrations:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nomado -d nomado_houses"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nomado-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  nomado-network:
+    driver: bridge

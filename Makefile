@@ -35,4 +35,30 @@ install: ## Install dependencies
 	cd backend && go mod tidy
 
 frontend: ## Serve frontend files
-	cd web && python3 -m http.server 3000
+	cd public && python3 -m http.server 3000
+
+# Docker commands
+docker-build: ## Build Docker image
+	docker build -t nomado-houses .
+
+docker-run: ## Run Docker container
+	docker run -p 8080:8080 --env-file backend/.env nomado-houses
+
+docker-up: ## Start application with Docker Compose
+	docker-compose up -d
+
+docker-down: ## Stop Docker Compose services
+	docker-compose down
+
+docker-logs: ## View Docker Compose logs
+	docker-compose logs -f
+
+docker-prod: ## Start production environment
+	docker-compose -f docker-compose.prod.yml up -d
+
+docker-prod-down: ## Stop production environment
+	docker-compose -f docker-compose.prod.yml down
+
+docker-clean: ## Clean Docker images and containers
+	docker-compose down -v
+	docker system prune -f
