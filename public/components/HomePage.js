@@ -5,10 +5,16 @@ import { API } from "../services/API.js";
 export class HomePage extends HTMLElement { // <home-page>
 
     async render() {
-        const allServices = await API.getAllServices();
+        const servicesResponse = await API.getAllServices();
+        console.log('Services response:', servicesResponse); // Debug log
+        const allServices = servicesResponse.data || servicesResponse; // Extract the data array
+        console.log('Extracted services:', allServices); // Debug log
         renderServicesInList(allServices, document.querySelector("#service-types ul"));
 
-        const allDestinations = await API.getAllDestinations();
+        const destinationsResponse = await API.getAllDestinations();
+        console.log('Destinations response:', destinationsResponse); // Debug log
+        const allDestinations = destinationsResponse.data || destinationsResponse; // Extract the data array
+        console.log('Extracted destinations:', allDestinations); // Debug log
         renderDestinationsInList(allDestinations, document.querySelector("#destinations ul"));
 
         function renderServicesInList(services, ul) {
