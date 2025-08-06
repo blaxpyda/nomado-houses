@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nomado Houses</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="manifest" href="/app.webmanifest">
+    <link rel="icon" href="images/logo1.jpg">
+    <script src="app.js" type="module" defer></script>
+</head>
+<body>
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-lg border-b border-gray-100">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <img src="images/logo1.jpg" height="40" width="40" alt="Nomado Logo" class="rounded-lg shadow-sm">
+                    <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Nomado</span>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="hidden md:flex">
+                    <ul class="flex items-center space-x-8">
+                        <li><a class="navlink text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full" href="/">Home</a></li>
+                        <li><a class="navlink text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full" href="/services">Services</a></li>
+                        <li><a class="navlink text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full" href="/about">About</a></li>
+                        <li><a class="navlink text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full" href="/account">My Account</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Auth Buttons -->
+                <div class="flex items-center space-x-3">
+                    <button type="button" onclick="location.href='/register'" class="hidden md:block px-4 py-2 text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200">Register</button>
+                    <button type="button" onclick="location.href='/login'" class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-full hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">Login</button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden p-2 text-gray-600 hover:text-blue-600 transition-colors" id="mobile-menu-button">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="md:hidden hidden bg-white border-t border-gray-100 py-4" id="mobile-menu">
+                <ul class="space-y-3">
+                    <li><a class="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" href="/">Home</a></li>
+                    <li><a class="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" href="/services">Services</a></li>
+                    <li><a class="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" href="/about">About</a></li>
+                    <li><a class="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" href="/account">My Account</a></li>
+                    <li><a class="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" href="/register">Register</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <main>
+        
+    </main>
+
+    <!-- Templates-->
+     <template id="template-home">
+        <!-- Hero Section -->
+        <section class="relative min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex items-center justify-center overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 bg-black/20"></div>
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+            
+            <div class="relative z-10 container mx-auto px-4 text-center">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+                        Your Gateway to 
+                        <span class="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Africa</span> 
+                        & Beyond
+                    </h2>
+                    <p class="text-xl md:text-2xl text-gray-200 mb-12 leading-relaxed max-w-3xl mx-auto">
+                        From visa assistance to romantic getaways, school trips to international jobs - Nomado makes your travel dreams a reality with local expertise and global reach
+                    </p>
+                    
+                    <!-- Search Bar -->
+                    <div class="max-w-2xl mx-auto mb-12">
+                        <form class="relative">
+                            <div class="flex bg-white rounded-2xl shadow-2xl p-2">
+                                <input type="text" placeholder="Search for services or destinations" aria-label="Search" 
+                                       class="flex-1 px-6 py-4 text-gray-700 placeholder-gray-400 bg-transparent border-none outline-none text-lg">
+                                <button type="submit" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                        <button class="group px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 shadow-2xl">
+                            <span class="flex items-center space-x-2">
+                                <span>Start Exploring</span>
+                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
+                            </span>
+                        </button>
+                        <button class="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-gray-900 transition-all duration-200 backdrop-blur-sm">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Floating Elements -->
+            <div class="absolute top-20 left-10 w-20 h-20 bg-yellow-400 rounded-full opacity-20 animate-pulse"></div>
+            <div class="absolute bottom-20 right-10 w-32 h-32 bg-purple-500 rounded-full opacity-20 animate-bounce"></div>
+        </section>
+        
+        <!-- Statistics Section -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="text-center group">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">50K+</div>
+                        <div class="text-gray-600 font-medium">Happy Travelers</div>
+                    </div>
+                    <div class="text-center group">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">200+</div>
+                        <div class="text-gray-600 font-medium">Destinations</div>
+                    </div>
+                    <div class="text-center group">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">98%</div>
+                        <div class="text-gray-600 font-medium">Success Rate</div>
+                    </div>   
+                    <div class="text-center group">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">8+</div>
+                        <div class="text-gray-600 font-medium">Years of Experience</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Popular Destinations Section -->
+        <section class="py-20 bg-gradient-to-br from-gray-50 to-blue-50" id="destinations">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Popular Destinations</h2>
+                    <p class="text-xl text-gray-600 max-w-2xl mx-auto">Discover amazing places with exclusive deals and unforgettable experiences</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <ul class="flex space-x-6 pb-4" style="scroll-snap-type: x mandatory;"></ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Services Section -->
+        <section class="py-20 bg-white" id="service-types">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">All Nomado Services</h2>
+                    <p class="text-xl text-gray-600 max-w-2xl mx-auto">Everything you need for your next adventure, all in one place</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Quick Book Section -->
+        <section class="py-20 bg-gradient-to-br from-blue-900 to-purple-900">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Quick Book</h2>
+                    <p class="text-xl text-blue-100 max-w-2xl mx-auto">Start your journey with just a few clicks</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Find Hotels -->
+                    <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H3m2 0V9a2 2 0 012-2h4a2 2 0 012 2v12M7 3h10"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">Find Hotels</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <input type="text" placeholder="Where are you going?" aria-label="Search Hotels" 
+                                   class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="date" aria-label="Check-in" 
+                                       class="px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                <input type="date" aria-label="Check-out" 
+                                       class="px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
+                            <button class="w-full py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-semibold rounded-xl hover:from-yellow-500 hover:to-orange-600 transform hover:scale-105 transition-all duration-200">
+                                Search Hotels
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Book Bus Travel -->
+                    <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-2xl flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">Book Bus Travel</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <input type="text" placeholder="From" aria-label="From" 
+                                   class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-green-400">
+                            <input type="text" placeholder="To" aria-label="To" 
+                                   class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-green-400">
+                            <input type="date" aria-label="Travel Date" 
+                                   class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-green-400">
+                            <button class="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold rounded-xl hover:from-green-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200">
+                                Find Buses
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Visa Help -->
+                    <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">Visa Help</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <input type="text" placeholder="Destination country" 
+                                   class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-purple-400">
+                            <select class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-purple-400">
+                                <option value="" class="text-gray-900">Visa Type</option>
+                                <option value="tourist" class="text-gray-900">Tourist</option>
+                                <option value="work" class="text-gray-900">Work</option>
+                                <option value="student" class="text-gray-900">Student</option>
+                            </select>
+                            <button class="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-700 transform hover:scale-105 transition-all duration-200">
+                                Get Assistance
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Why Choose Nomado Section -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Why Choose Nomado</h2>
+                    <p class="text-xl text-gray-600 max-w-2xl mx-auto">We make travel simple, safe and memorable</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="group text-center p-8 rounded-3xl hover:bg-gradient-to-br hover:from-blue-50 hover:to-purple-50 transition-all duration-300 hover:shadow-xl">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Trusted and Secure</h3>
+                        <p class="text-gray-600 leading-relaxed">8+ years of experience with 50,000+ happy travelers. Your safety and satisfaction are our priority.</p>
+                    </div>
+                    
+                    <div class="group text-center p-8 rounded-3xl hover:bg-gradient-to-br hover:from-green-50 hover:to-teal-50 transition-all duration-300 hover:shadow-xl">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-green-500 to-teal-600 rounded-3xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">24/7 Support</h3>
+                        <p class="text-gray-600 leading-relaxed">Round-the-clock assistance wherever you are. Our team is always ready to help you.</p>
+                    </div>
+                    
+                    <div class="group text-center p-8 rounded-3xl hover:bg-gradient-to-br hover:from-yellow-50 hover:to-orange-50 transition-all duration-300 hover:shadow-xl">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-3xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Personalised Service</h3>
+                        <p class="text-gray-600 leading-relaxed">Every journey is unique. We tailor our services to match your specific needs and preferences.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+     </template>
+    <footer class="bg-gray-900 text-white">
+        <div class="container mx-auto px-4 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Brand Section -->
+                <div class="lg:col-span-1">
+                    <div class="flex items-center space-x-2 mb-6">
+                        <img src="images/logo1.jpg" height="40" width="40" alt="Nomado Logo" class="rounded-lg">
+                        <h3 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Nomado</h3>
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">Your trusted travel companion across Africa and Beyond</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-200">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-200">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-200">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Services -->
+                <div>
+                    <h4 class="text-xl font-bold mb-6 text-white">Services</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/services/hotels" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Hotels
+                        </a></li>
+                        <li><a href="/services/bus travel" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Bus Travels
+                        </a></li>
+                        <li><a href="/services/visa-assistance" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Visa Assistance
+                        </a></li>
+                        <li><a href="/services/car-rentals" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Car Rentals
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <!-- Special Programs -->
+                <div>
+                    <h4 class="text-xl font-bold mb-6 text-white">Special Programs</h4>
+                    <ul class="space-y-3">
+                        <li><a href="little-nomado" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Little Nomads
+                        </a></li>
+                        <li><a href="nomado-love" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Nomado Love
+                        </a></li>
+                        <li><a href="event-retreats" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Events and Retreats
+                        </a></li>
+                        <li><a href="nomado-jobs" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            International Jobs
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <!-- Support -->
+                <div>
+                    <h4 class="text-xl font-bold mb-6 text-white">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Help Center
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Contact Us
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Privacy Policy
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group">
+                            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            Terms of Service
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-400">© 2024 Nomado. All rights reserved. Made with <span class="text-red-500">❤️</span> for African travelers.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Additional Interactive Features -->
+    <script>
+        // Animate stats counter on scroll
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current) + (element.textContent.includes('+') ? '+' : '') + (element.textContent.includes('%') ? '%' : '');
+            }, 20);
+        }
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeInUp');
+                    
+                    // Animate counters
+                    if (entry.target.closest('.grid')) {
+                        const counters = entry.target.querySelectorAll('.text-3xl, .text-4xl');
+                        counters.forEach(counter => {
+                            const text = counter.textContent;
+                            const number = parseInt(text.replace(/\D/g, ''));
+                            if (number && !counter.dataset.animated) {
+                                counter.dataset.animated = 'true';
+                                animateCounter(counter, number);
+                            }
+                        });
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Observe sections for animations
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+        
+        // Add custom CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .animate-fadeInUp {
+                animation: fadeInUp 0.6s ease-out forwards;
+            }
+            
+            /* Custom scrollbar */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+                border-radius: 4px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(45deg, #2563eb, #7c3aed);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
