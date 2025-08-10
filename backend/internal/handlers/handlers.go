@@ -187,419 +187,419 @@ func (h *DestinationHandler) DeleteDestination(w http.ResponseWriter, r *http.Re
 	})
 }
 
-// ServiceHandler handles service requests
-type ServiceHandler struct {
-	serviceService service.ServiceService
-	logger         *logger.Logger
-}
+// // ServiceHandler handles service requests
+// type ServiceHandler struct {
+// 	serviceService service.ServiceService
+// 	logger         *logger.Logger
+// }
 
-// NewServiceHandler creates a new service handler
-func NewServiceHandler(serviceService service.ServiceService, logger *logger.Logger) *ServiceHandler {
-	return &ServiceHandler{serviceService: serviceService, logger: logger}
-}
+// // NewServiceHandler creates a new service handler
+// func NewServiceHandler(serviceService service.ServiceService, logger *logger.Logger) *ServiceHandler {
+// 	return &ServiceHandler{serviceService: serviceService, logger: logger}
+// }
 
-// GetAllServices handles GET /api/services
-// @Summary Get all services
-// @Description Get all available services, optionally filtered by category
-// @Tags Services
-// @Produce json
-// @Param category query string false "Service category"
-// @Success 200 {object} models.APIResponse
-// @Failure 500 {object} models.ErrorResponse
-// @Router /services [get]
-func (h *ServiceHandler) GetAllServices(w http.ResponseWriter, r *http.Request) {
-	category := r.URL.Query().Get("category")
+// // GetAllServices handles GET /api/services
+// // @Summary Get all services
+// // @Description Get all available services, optionally filtered by category
+// // @Tags Services
+// // @Produce json
+// // @Param category query string false "Service category"
+// // @Success 200 {object} models.APIResponse
+// // @Failure 500 {object} models.ErrorResponse
+// // @Router /services [get]
+// func (h *ServiceHandler) GetAllServices(w http.ResponseWriter, r *http.Request) {
+// 	category := r.URL.Query().Get("category")
 
-	var services []models.Service
-	var err error
+// 	var services []models.Service
+// 	var err error
 
-	if category != "" {
-		services, err = h.serviceService.GetServicesByCategory(category)
-	} else {
-		services, err = h.serviceService.GetAllServices()
-	}
+// 	if category != "" {
+// 		services, err = h.serviceService.GetServicesByCategory(category)
+// 	} else {
+// 		services, err = h.serviceService.GetAllServices()
+// 	}
 
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	if err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Services retrieved successfully",
-		Data:    services,
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Services retrieved successfully",
+// 		Data:    services,
+// 	})
+// }
 
-// GetServiceByID handles GET /api/services/{id}
-func (h *ServiceHandler) GetServiceByID(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid service ID")
-		return
-	}
+// // GetServiceByID handles GET /api/services/{id}
+// func (h *ServiceHandler) GetServiceByID(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	id, err := strconv.Atoi(vars["id"])
+// 	if err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid service ID")
+// 		return
+// 	}
 
-	service, err := h.serviceService.GetServiceByID(id)
-	if err != nil {
-		respondWithError(w, http.StatusNotFound, err.Error())
-		return
-	}
+// 	service, err := h.serviceService.GetServiceByID(id)
+// 	if err != nil {
+// 		respondWithError(w, http.StatusNotFound, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Service retrieved successfully",
-		Data:    service,
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Service retrieved successfully",
+// 		Data:    service,
+// 	})
+// }
 
-// CreateService handles POST /api/services
-func (h *ServiceHandler) CreateService(w http.ResponseWriter, r *http.Request) {
-	var req models.CreateServiceRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
-		return
-	}
+// // CreateService handles POST /api/services
+// func (h *ServiceHandler) CreateService(w http.ResponseWriter, r *http.Request) {
+// 	var req models.CreateServiceRequest
+// 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+// 		return
+// 	}
 
-	service := &models.Service{
-		ProviderID:    req.ProviderID,
-		ServiceTypeID: req.ServiceTypeID,
-		Name:          req.Name,
-		Description:   req.Description,
-		Price:         req.Price,
-		Availability:  req.Availability,
-	}
+// 	service := &models.Service{
+// 		ProviderID:    req.ProviderID,
+// 		ServiceTypeID: req.ServiceTypeID,
+// 		Name:          req.Name,
+// 		Description:   req.Description,
+// 		Price:         req.Price,
+// 		Availability:  req.Availability,
+// 	}
 
-	if err := h.serviceService.CreateService(service); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	if err := h.serviceService.CreateService(service); err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusCreated, models.APIResponse{
-		Success: true,
-		Message: "Service created successfully",
-		Data:    service,
-	})
-}
+// 	respondWithJSON(w, http.StatusCreated, models.APIResponse{
+// 		Success: true,
+// 		Message: "Service created successfully",
+// 		Data:    service,
+// 	})
+// }
 
-// UpdateService handles PUT /api/services/{id}
-func (h *ServiceHandler) UpdateService(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid service ID")
-		return
-	}
+// // UpdateService handles PUT /api/services/{id}
+// func (h *ServiceHandler) UpdateService(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	id, err := strconv.Atoi(vars["id"])
+// 	if err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid service ID")
+// 		return
+// 	}
 
-	var req models.UpdateServiceRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
-		return
-	}
+// 	var req models.UpdateServiceRequest
+// 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+// 		return
+// 	}
 
-	service := &models.Service{
-		ID:            id,
-		ProviderID:    req.ProviderID,
-		ServiceTypeID: req.ServiceTypeID,
-		Name:          req.Name,
-		Description:   req.Description,
-		Price:         req.Price,
-		Availability:  req.Availability,
-	}
+// 	service := &models.Service{
+// 		ID:            id,
+// 		ProviderID:    req.ProviderID,
+// 		ServiceTypeID: req.ServiceTypeID,
+// 		Name:          req.Name,
+// 		Description:   req.Description,
+// 		Price:         req.Price,
+// 		Availability:  req.Availability,
+// 	}
 
-	if err := h.serviceService.UpdateService(service); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	if err := h.serviceService.UpdateService(service); err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Service updated successfully",
-		Data:    service,
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Service updated successfully",
+// 		Data:    service,
+// 	})
+// }
 
-// DeleteService handles DELETE /api/services/{id}
-func (h *ServiceHandler) DeleteService(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid service ID")
-		return
-	}
+// // DeleteService handles DELETE /api/services/{id}
+// func (h *ServiceHandler) DeleteService(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	id, err := strconv.Atoi(vars["id"])
+// 	if err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid service ID")
+// 		return
+// 	}
 
-	if err := h.serviceService.DeleteService(id); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	if err := h.serviceService.DeleteService(id); err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Service deleted successfully",
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Service deleted successfully",
+// 	})
+// }
 
-// BookingHandler handles booking requests
-type BookingHandler struct {
-	bookingService service.BookingService
-	logger         *logger.Logger
-}
+// // BookingHandler handles booking requests
+// type BookingHandler struct {
+// 	bookingService service.BookingService
+// 	logger         *logger.Logger
+// }
 
-// NewBookingHandler creates a new booking handler
-func NewBookingHandler(bookingService service.BookingService, logger *logger.Logger) *BookingHandler {
-	return &BookingHandler{bookingService: bookingService, logger: logger}
-}
+// // NewBookingHandler creates a new booking handler
+// func NewBookingHandler(bookingService service.BookingService, logger *logger.Logger) *BookingHandler {
+// 	return &BookingHandler{bookingService: bookingService, logger: logger}
+// }
 
-// CreateBooking handles POST /api/bookings
-// @Summary Create booking
-// @Description Create a new booking for a service
-// @Tags Bookings
-// @Accept json
-// @Produce json
-// @Param request body models.CreateBookingRequest true "Create booking request"
-// @Security Bearer
-// @Success 201 {object} models.APIResponse
-// @Failure 400 {object} models.ErrorResponse
-// @Failure 401 {object} models.ErrorResponse
-// @Router /bookings [post]
-func (h *BookingHandler) CreateBooking(w http.ResponseWriter, r *http.Request) {
-	var req models.CreateBookingRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
-		return
-	}
+// // CreateBooking handles POST /api/bookings
+// // @Summary Create booking
+// // @Description Create a new booking for a service
+// // @Tags Bookings
+// // @Accept json
+// // @Produce json
+// // @Param request body models.CreateBookingRequest true "Create booking request"
+// // @Security Bearer
+// // @Success 201 {object} models.APIResponse
+// // @Failure 400 {object} models.ErrorResponse
+// // @Failure 401 {object} models.ErrorResponse
+// // @Router /bookings [post]
+// func (h *BookingHandler) CreateBooking(w http.ResponseWriter, r *http.Request) {
+// 	var req models.CreateBookingRequest
+// 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+// 		return
+// 	}
 
-	// Get user ID from header (set by auth middleware)
-	userIDStr := r.Header.Get("X-User-ID")
-	userID, err := strconv.Atoi(userIDStr)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid user ID")
-		return
-	}
+// 	// Get user ID from header (set by auth middleware)
+// 	userIDStr := r.Header.Get("X-User-ID")
+// 	userID, err := strconv.Atoi(userIDStr)
+// 	if err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid user ID")
+// 		return
+// 	}
 
-	booking := &models.Booking{
-		UserID:           userID,
-		ServiceID:        req.ServiceID,
-		ProviderID:       req.ProviderID,
-		BookingDateStart: req.BookingDateStart,
-		BookingDateEnd:   req.BookingDateEnd,
-		TotalPrice:       req.TotalPrice,
-		Status:           "pending",
-	}
+// 	booking := &models.Booking{
+// 		UserID:           userID,
+// 		ServiceID:        req.ServiceID,
+// 		ProviderID:       req.ProviderID,
+// 		BookingDateStart: req.BookingDateStart,
+// 		BookingDateEnd:   req.BookingDateEnd,
+// 		TotalPrice:       req.TotalPrice,
+// 		Status:           "pending",
+// 	}
 
-	if err := h.bookingService.CreateBooking(booking); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	if err := h.bookingService.CreateBooking(booking); err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusCreated, models.APIResponse{
-		Success: true,
-		Message: "Booking created successfully",
-		Data:    booking,
-	})
-}
+// 	respondWithJSON(w, http.StatusCreated, models.APIResponse{
+// 		Success: true,
+// 		Message: "Booking created successfully",
+// 		Data:    booking,
+// 	})
+// }
 
-// GetUserBookings handles GET /api/bookings
-// @Summary Get user bookings
-// @Description Get all bookings for the authenticated user
-// @Tags Bookings
-// @Produce json
-// @Security Bearer
-// @Success 200 {object} models.APIResponse
-// @Failure 401 {object} models.ErrorResponse
-// @Router /bookings [get]
-func (h *BookingHandler) GetUserBookings(w http.ResponseWriter, r *http.Request) {
-	// Get user ID from header (set by auth middleware)
-	userIDStr := r.Header.Get("X-User-ID")
-	userID, err := strconv.Atoi(userIDStr)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid user ID")
-		return
-	}
+// // GetUserBookings handles GET /api/bookings
+// // @Summary Get user bookings
+// // @Description Get all bookings for the authenticated user
+// // @Tags Bookings
+// // @Produce json
+// // @Security Bearer
+// // @Success 200 {object} models.APIResponse
+// // @Failure 401 {object} models.ErrorResponse
+// // @Router /bookings [get]
+// func (h *BookingHandler) GetUserBookings(w http.ResponseWriter, r *http.Request) {
+// 	// Get user ID from header (set by auth middleware)
+// 	userIDStr := r.Header.Get("X-User-ID")
+// 	userID, err := strconv.Atoi(userIDStr)
+// 	if err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid user ID")
+// 		return
+// 	}
 
-	bookings, err := h.bookingService.GetBookingsByUserID(userID)
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	bookings, err := h.bookingService.GetBookingsByUserID(userID)
+// 	if err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Bookings retrieved successfully",
-		Data:    bookings,
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Bookings retrieved successfully",
+// 		Data:    bookings,
+// 	})
+// }
 
-// GetBookingByID handles GET /api/bookings/{id}
-func (h *BookingHandler) GetBookingByID(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid booking ID")
-		return
-	}
+// // GetBookingByID handles GET /api/bookings/{id}
+// func (h *BookingHandler) GetBookingByID(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	id, err := strconv.Atoi(vars["id"])
+// 	if err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid booking ID")
+// 		return
+// 	}
 
-	booking, err := h.bookingService.GetBookingByID(id)
-	if err != nil {
-		respondWithError(w, http.StatusNotFound, err.Error())
-		return
-	}
+// 	booking, err := h.bookingService.GetBookingByID(id)
+// 	if err != nil {
+// 		respondWithError(w, http.StatusNotFound, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Booking retrieved successfully",
-		Data:    booking,
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Booking retrieved successfully",
+// 		Data:    booking,
+// 	})
+// }
 
-// UpdateBookingStatus handles PUT /api/bookings/{id}/status
-func (h *BookingHandler) UpdateBookingStatus(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid booking ID")
-		return
-	}
+// // UpdateBookingStatus handles PUT /api/bookings/{id}/status
+// func (h *BookingHandler) UpdateBookingStatus(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	id, err := strconv.Atoi(vars["id"])
+// 	if err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid booking ID")
+// 		return
+// 	}
 
-	var req models.UpdateBookingStatusRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
-		return
-	}
+// 	var req models.UpdateBookingStatusRequest
+// 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+// 		return
+// 	}
 
-	if err := h.bookingService.UpdateBookingStatus(id, req.Status); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	if err := h.bookingService.UpdateBookingStatus(id, req.Status); err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Booking status updated successfully",
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Booking status updated successfully",
+// 	})
+// }
 
-// ServiceTypeHandler handles service type requests
-type ServiceTypeHandler struct {
-	serviceTypeService service.ServiceTypeService
-	logger             *logger.Logger
-}
+// // ServiceTypeHandler handles service type requests
+// type ServiceTypeHandler struct {
+// 	serviceTypeService service.ServiceTypeService
+// 	logger             *logger.Logger
+// }
 
-// NewServiceTypeHandler creates a new service type handler
-func NewServiceTypeHandler(serviceTypeService service.ServiceTypeService, logger *logger.Logger) *ServiceTypeHandler {
-	return &ServiceTypeHandler{serviceTypeService: serviceTypeService, logger: logger}
-}
+// // NewServiceTypeHandler creates a new service type handler
+// func NewServiceTypeHandler(serviceTypeService service.ServiceTypeService, logger *logger.Logger) *ServiceTypeHandler {
+// 	return &ServiceTypeHandler{serviceTypeService: serviceTypeService, logger: logger}
+// }
 
-// GetAllServiceTypes handles GET /api/service-types
-func (h *ServiceTypeHandler) GetAllServiceTypes(w http.ResponseWriter, r *http.Request) {
-	serviceTypes, err := h.serviceTypeService.GetAllServiceTypes()
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// // GetAllServiceTypes handles GET /api/service-types
+// func (h *ServiceTypeHandler) GetAllServiceTypes(w http.ResponseWriter, r *http.Request) {
+// 	serviceTypes, err := h.serviceTypeService.GetAllServiceTypes()
+// 	if err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Service types retrieved successfully",
-		Data:    serviceTypes,
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Service types retrieved successfully",
+// 		Data:    serviceTypes,
+// 	})
+// }
 
-// GetServiceTypeByID handles GET /api/service-types/{id}
-func (h *ServiceTypeHandler) GetServiceTypeByID(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid service type ID")
-		return
-	}
+// // GetServiceTypeByID handles GET /api/service-types/{id}
+// func (h *ServiceTypeHandler) GetServiceTypeByID(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	id, err := strconv.Atoi(vars["id"])
+// 	if err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid service type ID")
+// 		return
+// 	}
 
-	serviceType, err := h.serviceTypeService.GetServiceTypeByID(id)
-	if err != nil {
-		respondWithError(w, http.StatusNotFound, err.Error())
-		return
-	}
+// 	serviceType, err := h.serviceTypeService.GetServiceTypeByID(id)
+// 	if err != nil {
+// 		respondWithError(w, http.StatusNotFound, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Service type retrieved successfully",
-		Data:    serviceType,
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Service type retrieved successfully",
+// 		Data:    serviceType,
+// 	})
+// }
 
-// CreateServiceType handles POST /api/service-types
-func (h *ServiceTypeHandler) CreateServiceType(w http.ResponseWriter, r *http.Request) {
-	var req models.CreateServiceTypeRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
-		return
-	}
+// // CreateServiceType handles POST /api/service-types
+// func (h *ServiceTypeHandler) CreateServiceType(w http.ResponseWriter, r *http.Request) {
+// 	var req models.CreateServiceTypeRequest
+// 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+// 		return
+// 	}
 
-	serviceType := &models.ServiceType{
-		Name:        req.Name,
-		Description: req.Description,
-	}
+// 	serviceType := &models.ServiceType{
+// 		Name:        req.Name,
+// 		Description: req.Description,
+// 	}
 
-	if err := h.serviceTypeService.CreateServiceType(serviceType); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	if err := h.serviceTypeService.CreateServiceType(serviceType); err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusCreated, models.APIResponse{
-		Success: true,
-		Message: "Service type created successfully",
-		Data:    serviceType,
-	})
-}
+// 	respondWithJSON(w, http.StatusCreated, models.APIResponse{
+// 		Success: true,
+// 		Message: "Service type created successfully",
+// 		Data:    serviceType,
+// 	})
+// }
 
-// UpdateServiceType handles PUT /api/service-types/{id}
-func (h *ServiceTypeHandler) UpdateServiceType(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid service type ID")
-		return
-	}
+// // UpdateServiceType handles PUT /api/service-types/{id}
+// func (h *ServiceTypeHandler) UpdateServiceType(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	id, err := strconv.Atoi(vars["id"])
+// 	if err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid service type ID")
+// 		return
+// 	}
 
-	var req models.UpdateServiceTypeRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
-		return
-	}
+// 	var req models.UpdateServiceTypeRequest
+// 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+// 		return
+// 	}
 
-	serviceType := &models.ServiceType{
-		ID:          id,
-		Name:        req.Name,
-		Description: req.Description,
-	}
+// 	serviceType := &models.ServiceType{
+// 		ID:          id,
+// 		Name:        req.Name,
+// 		Description: req.Description,
+// 	}
 
-	if err := h.serviceTypeService.UpdateServiceType(serviceType); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	if err := h.serviceTypeService.UpdateServiceType(serviceType); err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Service type updated successfully",
-		Data:    serviceType,
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Service type updated successfully",
+// 		Data:    serviceType,
+// 	})
+// }
 
-// DeleteServiceType handles DELETE /api/service-types/{id}
-func (h *ServiceTypeHandler) DeleteServiceType(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid service type ID")
-		return
-	}
+// // DeleteServiceType handles DELETE /api/service-types/{id}
+// func (h *ServiceTypeHandler) DeleteServiceType(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	id, err := strconv.Atoi(vars["id"])
+// 	if err != nil {
+// 		respondWithError(w, http.StatusBadRequest, "Invalid service type ID")
+// 		return
+// 	}
 
-	if err := h.serviceTypeService.DeleteServiceType(id); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// 	if err := h.serviceTypeService.DeleteServiceType(id); err != nil {
+// 		respondWithError(w, http.StatusInternalServerError, err.Error())
+// 		return
+// 	}
 
-	respondWithJSON(w, http.StatusOK, models.APIResponse{
-		Success: true,
-		Message: "Service type deleted successfully",
-	})
-}
+// 	respondWithJSON(w, http.StatusOK, models.APIResponse{
+// 		Success: true,
+// 		Message: "Service type deleted successfully",
+// 	})
+// }

@@ -123,3 +123,59 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.WriteHeader(code)
 	w.Write(response)
 }
+
+// VerifyEmail handles email verification
+// @Summary Verify user email
+// @Description Verify user email with verification code
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param request body models.VerifyEmailRequest true "Verify email request"
+// @Success 200 {object} models.APIResponse
+// @Failure 400 {object} models.ErrorResponse
+// @Router /auth/verify-email [post]
+func (h *AuthHandler) VerifyEmail(w http.ResponseWriter, r *http.Request) {
+	var req models.VerifyEmailRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	if err := h.authService.VerifyEmail(&req); err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, models.APIResponse{
+		Success: true,
+		Message: "Email verified successfully",
+	})
+}
+
+// ResendVerification handles resending verification email
+// @Summary Resend verification email
+// @Description Resend verification email to user
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param request body models.ResendVerificationRequest true "Resend verification request"
+// @Success 200 {object} models.APIResponse
+// @Failure 400 {object} models.ErrorResponse
+// @Router /auth/resend-verification [post]
+func (h *AuthHandler) ResendVerification(w http.ResponseWriter, r *http.Request) {
+	var req models.ResendVerificationRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	if err := h.authService.ResendVerification(&req); err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, models.APIResponse{
+		Success: true,
+		Message: "Verification email sent successfully",
+	})
+}

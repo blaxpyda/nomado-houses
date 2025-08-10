@@ -6,12 +6,16 @@ import (
 
 // User represents a user in the system
 type User struct {
-	ID        int    `json:"id" db:"id"`
-	Email     string `json:"email" db:"email"`
-	Password  string `json:"-" db:"password"`
-	FirstName string `json:"first_name" db:"first_name"`
-	LastName  string `json:"last_name" db:"last_name"`
-	Phone     string `json:"phone" db:"phone"`
+	ID               int       `json:"id" db:"id"`
+	Email            string    `json:"email" db:"email"`
+	Password         string    `json:"-" db:"password"`
+	FirstName        string    `json:"first_name" db:"first_name"`
+	LastName         string    `json:"last_name" db:"last_name"`
+	Phone            string    `json:"phone" db:"phone"`
+	EmailVerified    bool      `json:"email_verified" db:"email_verified"`
+	VerificationCode string    `json:"-" db:"verification_code"`
+	CreatedAt        time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at" db:"updated_at"`
 }
 
 // Service represents a category of services offered by the platform
@@ -75,7 +79,6 @@ type Destination struct {
 	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
 }
 
-
 // LoginRequest represents the login request payload
 type LoginRequest struct {
 	Email    string `json:"email"`
@@ -93,8 +96,20 @@ type RegisterRequest struct {
 
 // AuthResponse represents the authentication response
 type AuthResponse struct {
-	Token string `json:"token"`
-	User  User   `json:"user"`
+	Token         string `json:"token"`
+	User          User   `json:"user"`
+	EmailVerified bool   `json:"email_verified"`
+}
+
+// VerifyEmailRequest represents the email verification request
+type VerifyEmailRequest struct {
+	Email            string `json:"email"`
+	VerificationCode string `json:"verification_code"`
+}
+
+// ResendVerificationRequest represents the resend verification request
+type ResendVerificationRequest struct {
+	Email string `json:"email"`
 }
 
 // APIResponse represents a generic API response

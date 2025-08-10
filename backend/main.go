@@ -62,6 +62,14 @@ func main() {
 	}
 	defer database.CloseDB()
 
+	// // Create tables and seed data
+	// if err := database.CreateTables(); err != nil {
+	// 	log.Printf("Warning: Failed to create tables: %v", err)
+	// }
+	// if err := database.SeedData(); err != nil {
+	// 	log.Printf("Warning: Failed to seed data: %v", err)
+	// }
+
 	// Initialize repositories
 	userRepo := repository.NewUserRepository(database.DB, logInstance)
 	destinationRepo := repository.NewDestinationRepository(database.DB, logInstance)
@@ -92,6 +100,8 @@ func main() {
 	// Public routes
 	api.HandleFunc("/auth/register", authHandler.Register).Methods("POST")
 	api.HandleFunc("/auth/login", authHandler.Login).Methods("POST")
+	api.HandleFunc("/auth/verify-email", authHandler.VerifyEmail).Methods("POST")
+	api.HandleFunc("/auth/resend-verification", authHandler.ResendVerification).Methods("POST")
 	api.HandleFunc("/destinations", destinationHandler.GetAllDestinations).Methods("GET")
 	api.HandleFunc("/destinations/{id}", destinationHandler.GetDestinationByID).Methods("GET")
 	api.HandleFunc("/services", serviceHandler.GetAllServices).Methods("GET")
@@ -124,6 +134,17 @@ func main() {
 
 	// Swagger documentation
 	r.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+
+	// Auth page routes
+	r.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./public/login.html")
+	})
+	r.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./public/register.html")
+	})
+	r.HandleFunc("/verify-email", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./public/verify-email.html")
+	})
 
 	// Serve static files
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public")))
