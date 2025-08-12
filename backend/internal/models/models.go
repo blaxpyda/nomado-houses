@@ -4,24 +4,76 @@ import (
 	"time"
 )
 
+// UserRole represents the different user roles in the system
+type UserRole string
+
+const (
+	RoleUser     UserRole = "user"
+	RoleAdmin    UserRole = "admin"
+	RoleProvider UserRole = "provider"
+)
+
+// IsValid checks if the role is valid
+func (r UserRole) IsValid() bool {
+	switch r {
+	case RoleUser, RoleAdmin, RoleProvider:
+		return true
+	}
+	return false
+}
+
+// String returns the string representation of the role
+func (r UserRole) String() string {
+	return string(r)
+}
+
 // User represents a user in the system
 type User struct {
-	ID               int       `json:"id" db:"id"`
-	Email            string    `json:"email" db:"email"`
-	Password         string    `json:"-" db:"password"`
-	FirstName        string    `json:"first_name" db:"first_name"`
-	LastName         string    `json:"last_name" db:"last_name"`
-	Phone            string    `json:"phone" db:"phone"`
-	EmailVerified    bool      `json:"email_verified" db:"email_verified"`
-	VerificationCode string    `json:"-" db:"verification_code"`
-	CreatedAt        time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at" db:"updated_at"`
+	ID               int      `json:"id" db:"id"`
+	Email            string   `json:"email" db:"email"`
+	Password         string   `json:"-" db:"password"`
+	FirstName        string   `json:"first_name" db:"first_name"`
+	LastName         string   `json:"last_name" db:"last_name"`
+	Phone            string   `json:"phone" db:"phone"`
+	Role             UserRole `json:"role" db:"role"`
+	EmailVerified    bool     `json:"email_verified" db:"email_verified"`
+	VerificationCode string   `json:"-" db:"verification_code"`
+
+	// Provider-specific fields (only used when role is provider)
+	CompanyName string `json:"company_name,omitempty" db:"company_name"`
+	Description string `json:"description,omitempty" db:"description"`
+	Website     string `json:"website,omitempty" db:"website"`
+	Address     string `json:"address,omitempty" db:"address"`
+	Verified    bool   `json:"verified" db:"verified"`
+
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+}
+
+// HasRole checks if the user has a specific role
+func (u *User) HasRole(role UserRole) bool {
+	return u.Role == role
+}
+
+// IsAdmin checks if the user is an admin
+func (u *User) IsAdmin() bool {
+	return u.Role == RoleAdmin
+}
+
+// IsProvider checks if the user is a provider
+func (u *User) IsProvider() bool {
+	return u.Role == RoleProvider
+}
+
+// IsUser checks if the user is a regular user
+func (u *User) IsUser() bool {
+	return u.Role == RoleUser
 }
 
 // Service represents a category of services offered by the platform
 type Service struct {
 	ID            int       `json:"id" db:"id"`
-	ProviderID    int       `json:"provider_id" db:"provider_id"`
+	UserID        int       `json:"user_id" db:"user_id"` // Changed from ProviderID to UserID
 	ServiceTypeID int       `json:"service_type_id" db:"service_type_id"`
 	Name          string    `json:"name" db:"name"`
 	Description   string    `json:"description" db:"description"`
@@ -43,7 +95,6 @@ type Booking struct {
 	ID               int       `json:"id" db:"id"`
 	UserID           int       `json:"user_id" db:"user_id"`
 	ServiceID        int       `json:"service_id" db:"service_id"`
-	ProviderID       int       `json:"provider_id" db:"provider_id"`
 	BookingDateStart time.Time `json:"booking_date_start" db:"booking_date_start"`
 	BookingDateEnd   time.Time `json:"booking_date_end" db:"booking_date_end"`
 	TotalPrice       float64   `json:"total_price" db:"total_price"`
@@ -87,11 +138,12 @@ type LoginRequest struct {
 
 // RegisterRequest represents the registration request payload
 type RegisterRequest struct {
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Phone     string `json:"phone"`
+	Email     string   `json:"email"`
+	Password  string   `json:"password"`
+	FirstName string   `json:"first_name"`
+	LastName  string   `json:"last_name"`
+	Phone     string   `json:"phone"`
+	Role      UserRole `json:"role"`
 }
 
 // AuthResponse represents the authentication response
@@ -142,7 +194,6 @@ type UpdateDestinationRequest struct {
 
 // CreateServiceRequest represents the request to create a service
 type CreateServiceRequest struct {
-	ProviderID    int     `json:"provider_id" validate:"required"`
 	ServiceTypeID int     `json:"service_type_id" validate:"required"`
 	Name          string  `json:"name" validate:"required"`
 	Description   string  `json:"description" validate:"required"`
@@ -152,7 +203,6 @@ type CreateServiceRequest struct {
 
 // UpdateServiceRequest represents the request to update a service
 type UpdateServiceRequest struct {
-	ProviderID    int     `json:"provider_id" validate:"required"`
 	ServiceTypeID int     `json:"service_type_id" validate:"required"`
 	Name          string  `json:"name" validate:"required"`
 	Description   string  `json:"description" validate:"required"`
@@ -175,7 +225,6 @@ type UpdateServiceTypeRequest struct {
 // CreateBookingRequest represents the request to create a booking
 type CreateBookingRequest struct {
 	ServiceID        int       `json:"service_id" validate:"required"`
-	ProviderID       int       `json:"provider_id" validate:"required"`
 	BookingDateStart time.Time `json:"booking_date_start" validate:"required"`
 	BookingDateEnd   time.Time `json:"booking_date_end" validate:"required"`
 	TotalPrice       float64   `json:"total_price" validate:"required,gt=0"`

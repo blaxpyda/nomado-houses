@@ -52,7 +52,6 @@ func (h *BookingHandler) CreateBooking(w http.ResponseWriter, r *http.Request) {
 	booking := &models.Booking{
 		UserID:           userID,
 		ServiceID:        req.ServiceID,
-		ProviderID:       req.ProviderID,
 		BookingDateStart: req.BookingDateStart,
 		BookingDateEnd:   req.BookingDateEnd,
 		TotalPrice:       req.TotalPrice,

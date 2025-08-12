@@ -48,7 +48,8 @@
                         <!-- Verification Code Field -->
                         <div>
                             <label for="verificationCode" class="block text-sm font-medium text-white mb-2">Verification Code</label>
-                            <input type="text" id="verificationCode" name="verification_code" required maxlength="6"
+                            <input type="number" id="verificationCode" name="verification_code" required maxlength="6" minlength="6"
+                                   pattern="[0-9]{6}" inputmode="numeric"
                                    class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 text-center text-2xl font-mono tracking-wider"
                                    placeholder="000000">
                         </div>
@@ -255,9 +256,37 @@
             }
         });
 
-        // Auto-format verification code input
+        // Auto-format verification code input - only allow digits
         verificationCodeInput.addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+            // Remove any non-digit characters and limit to 6 characters
+            let value = e.target.value.replace(/\D/g, '').slice(0, 6);
+            e.target.value = value;
+            
+            // Auto-submit when 6 digits are entered
+            if (value.length === 6) {
+                verificationForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Prevent pasting non-numeric content
+        verificationCodeInput.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const paste = (e.clipboardData || window.clipboardData).getData('text');
+            const numericOnly = paste.replace(/\D/g, '').slice(0, 6);
+            e.target.value = numericOnly;
+            
+            // Auto-submit if 6 digits were pasted
+            if (numericOnly.length === 6) {
+                verificationForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Prevent non-numeric keyboard input
+        verificationCodeInput.addEventListener('keypress', (e) => {
+            const char = String.fromCharCode(e.which);
+            if (!/[0-9]/.test(char)) {
+                e.preventDefault();
+            }
         });
 
         // Initialize page

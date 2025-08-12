@@ -3,7 +3,6 @@ package service
 import (
 	"bytes"
 	"crypto/rand"
-	"encoding/hex"
 	"fmt"
 	"html/template"
 	"net/smtp"
@@ -37,11 +36,23 @@ func NewEmailService() EmailService {
 	}
 }
 
-// GenerateVerificationCode generates a random verification code
+// GenerateVerificationCode generates a random 6-digit verification code
 func (s *emailService) GenerateVerificationCode() string {
-	bytes := make([]byte, 3) // 6 character hex code
+	bytes := make([]byte, 3)
 	rand.Read(bytes)
-	return hex.EncodeToString(bytes)
+
+	// Convert to 6-digit number
+	code := ""
+	for _, b := range bytes {
+		code += fmt.Sprintf("%02d", int(b)%100)
+	}
+
+	// Ensure it's exactly 6 digits
+	if len(code) > 6 {
+		code = code[:6]
+	}
+
+	return code
 }
 
 // SendVerificationEmail sends a verification email

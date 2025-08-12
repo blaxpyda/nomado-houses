@@ -86,7 +86,6 @@ func (h *ServiceHandler) CreateService(w http.ResponseWriter, r *http.Request) {
 	}
 
 	service := &models.Service{
-		ProviderID:    req.ProviderID,
 		ServiceTypeID: req.ServiceTypeID,
 		Name:          req.Name,
 		Description:   req.Description,
@@ -123,14 +122,12 @@ func (h *ServiceHandler) UpdateService(w http.ResponseWriter, r *http.Request) {
 
 	service := &models.Service{
 		ID:            id,
-		ProviderID:    req.ProviderID,
 		ServiceTypeID: req.ServiceTypeID,
 		Name:          req.Name,
 		Description:   req.Description,
 		Price:         req.Price,
 		Availability:  req.Availability,
 	}
-
 	if err := h.serviceService.UpdateService(service); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return

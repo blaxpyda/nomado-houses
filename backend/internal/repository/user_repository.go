@@ -13,6 +13,9 @@ type UserRepository interface {
 	GetUserByEmail(email string) (*models.User, error)
 	GetUserByID(id int) (*models.User, error)
 	UpdateUser(user *models.User) error
+	UpdateUserRole(userID int, role models.UserRole) error
+	GetAllUsers() ([]models.User, error)
+	GetUsersByRole(role models.UserRole) ([]models.User, error)
 	DeleteUser(id int) error
 	UpdateVerificationCode(email, code string) error
 	VerifyEmail(email, code string) error
@@ -31,12 +34,17 @@ func NewUserRepository(db *sql.DB, logger *logger.Logger) UserRepository {
 
 // CreateUser creates a new user
 func (r *userRepository) CreateUser(user *models.User) error {
+	// Set default role if not specified
+	if user.Role == "" {
+		user.Role = models.RoleUser
+	}
+
 	query := `
-		INSERT INTO users (email, password, first_name, last_name, phone, email_verified, verification_code)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		INSERT INTO users (email, password, first_name, last_name, phone, role, email_verified, verification_code)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING id, created_at, updated_at`
 
-	err := r.db.QueryRow(query, user.Email, user.Password, user.FirstName, user.LastName, user.Phone, false, user.VerificationCode).Scan(&user.ID, &user.CreatedAt, &user.UpdatedAt)
+	err := r.db.QueryRow(query, user.Email, user.Password, user.FirstName, user.LastName, user.Phone, user.Role, false, user.VerificationCode).Scan(&user.ID, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
 		return fmt.Errorf("failed to create user: %w", err)
 	}
@@ -50,12 +58,12 @@ func (r *userRepository) CreateUser(user *models.User) error {
 func (r *userRepository) GetUserByEmail(email string) (*models.User, error) {
 	user := &models.User{}
 	query := `
-		SELECT id, email, password, first_name, last_name, phone, email_verified, verification_code, created_at, updated_at
+		SELECT id, email, password, first_name, last_name, phone, role, email_verified, verification_code, created_at, updated_at
 		FROM users WHERE email = $1`
 
 	err := r.db.QueryRow(query, email).Scan(
 		&user.ID, &user.Email, &user.Password, &user.FirstName,
-		&user.LastName, &user.Phone, &user.EmailVerified, &user.VerificationCode, &user.CreatedAt, &user.UpdatedAt)
+		&user.LastName, &user.Phone, &user.Role, &user.EmailVerified, &user.VerificationCode, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("user not found")
@@ -70,12 +78,12 @@ func (r *userRepository) GetUserByEmail(email string) (*models.User, error) {
 func (r *userRepository) GetUserByID(id int) (*models.User, error) {
 	user := &models.User{}
 	query := `
-		SELECT id, email, password, first_name, last_name, phone, email_verified, verification_code, created_at, updated_at
+		SELECT id, email, password, first_name, last_name, phone, role, email_verified, verification_code, created_at, updated_at
 		FROM users WHERE id = $1`
 
 	err := r.db.QueryRow(query, id).Scan(
 		&user.ID, &user.Email, &user.Password, &user.FirstName,
-		&user.LastName, &user.Phone, &user.EmailVerified, &user.VerificationCode, &user.CreatedAt, &user.UpdatedAt)
+		&user.LastName, &user.Phone, &user.Role, &user.EmailVerified, &user.VerificationCode, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("user not found")
@@ -90,13 +98,86 @@ func (r *userRepository) GetUserByID(id int) (*models.User, error) {
 func (r *userRepository) UpdateUser(user *models.User) error {
 	query := `
 		UPDATE users 
-		SET first_name = $1, last_name = $2, phone = $3
-		WHERE id = $4`
-	_, err := r.db.Exec(query, user.FirstName, user.LastName, user.Phone, user.ID)
+		SET first_name = $1, last_name = $2, phone = $3, role = $4, updated_at = CURRENT_TIMESTAMP
+		WHERE id = $5`
+	_, err := r.db.Exec(query, user.FirstName, user.LastName, user.Phone, user.Role, user.ID)
 	if err != nil {
 		return fmt.Errorf("failed to update user: %w", err)
 	}
 	return nil
+}
+
+// UpdateUserRole updates a user's role
+func (r *userRepository) UpdateUserRole(userID int, role models.UserRole) error {
+	query := `
+		UPDATE users 
+		SET role = $1, updated_at = CURRENT_TIMESTAMP
+		WHERE id = $2`
+	_, err := r.db.Exec(query, role, userID)
+	if err != nil {
+		return fmt.Errorf("failed to update user role: %w", err)
+	}
+	return nil
+}
+
+// GetAllUsers retrieves all users
+func (r *userRepository) GetAllUsers() ([]models.User, error) {
+	query := `
+		SELECT id, email, password, first_name, last_name, phone, role, email_verified, verification_code, created_at, updated_at
+		FROM users ORDER BY created_at DESC`
+
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get users: %w", err)
+	}
+	defer rows.Close()
+
+	var users []models.User
+	for rows.Next() {
+		var user models.User
+		err := rows.Scan(
+			&user.ID, &user.Email, &user.Password, &user.FirstName,
+			&user.LastName, &user.Phone, &user.Role, &user.EmailVerified,
+			&user.VerificationCode, &user.CreatedAt, &user.UpdatedAt)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan user: %w", err)
+		}
+		// Clear password for security
+		user.Password = ""
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+// GetUsersByRole retrieves users by role
+func (r *userRepository) GetUsersByRole(role models.UserRole) ([]models.User, error) {
+	query := `
+		SELECT id, email, password, first_name, last_name, phone, role, email_verified, verification_code, created_at, updated_at
+		FROM users WHERE role = $1 ORDER BY created_at DESC`
+
+	rows, err := r.db.Query(query, role)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get users by role: %w", err)
+	}
+	defer rows.Close()
+
+	var users []models.User
+	for rows.Next() {
+		var user models.User
+		err := rows.Scan(
+			&user.ID, &user.Email, &user.Password, &user.FirstName,
+			&user.LastName, &user.Phone, &user.Role, &user.EmailVerified,
+			&user.VerificationCode, &user.CreatedAt, &user.UpdatedAt)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan user: %w", err)
+		}
+		// Clear password for security
+		user.Password = ""
+		users = append(users, user)
+	}
+
+	return users, nil
 }
 
 // DeleteUser deletes a user

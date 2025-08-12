@@ -30,11 +30,11 @@ func NewBookingRepository(db *sql.DB, logger *logger.Logger) BookingRepository {
 // CreateBooking creates a new booking
 func (r *bookingRepository) CreateBooking(booking *models.Booking) error {
 	query := `
-		INSERT INTO bookings (user_id, service_id, provider_id, booking_date_start, booking_date_end, total_price, status)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		INSERT INTO bookings (user_id, service_id, booking_date_start, booking_date_end, total_price, status)
+		VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING id, created_at, updated_at`
 
-	err := r.db.QueryRow(query, booking.UserID, booking.ServiceID, booking.ProviderID,
+	err := r.db.QueryRow(query, booking.UserID, booking.ServiceID,
 		booking.BookingDateStart, booking.BookingDateEnd, booking.TotalPrice, booking.Status).Scan(
 		&booking.ID, &booking.CreatedAt, &booking.UpdatedAt,
 	)
@@ -48,7 +48,7 @@ func (r *bookingRepository) CreateBooking(booking *models.Booking) error {
 // GetBookingsByUserID retrieves bookings by user ID
 func (r *bookingRepository) GetBookingsByUserID(userID int) ([]models.Booking, error) {
 	query := `
-		SELECT id, user_id, service_id, provider_id, booking_date_start, booking_date_end, total_price, status, created_at, updated_at
+		SELECT id, user_id, service_id, booking_date_start, booking_date_end, total_price, status, created_at, updated_at
 		FROM bookings
 		WHERE user_id = $1
 		ORDER BY created_at DESC`
@@ -63,7 +63,7 @@ func (r *bookingRepository) GetBookingsByUserID(userID int) ([]models.Booking, e
 	for rows.Next() {
 		var booking models.Booking
 		err := rows.Scan(
-			&booking.ID, &booking.UserID, &booking.ServiceID, &booking.ProviderID,
+			&booking.ID, &booking.UserID, &booking.ServiceID,
 			&booking.BookingDateStart, &booking.BookingDateEnd,
 			&booking.TotalPrice, &booking.Status, &booking.CreatedAt, &booking.UpdatedAt,
 		)
@@ -80,11 +80,11 @@ func (r *bookingRepository) GetBookingsByUserID(userID int) ([]models.Booking, e
 func (r *bookingRepository) GetBookingByID(id int) (*models.Booking, error) {
 	booking := &models.Booking{}
 	query := `
-		SELECT id, user_id, service_id, provider_id, booking_date_start, booking_date_end, total_price, status, created_at, updated_at
+		SELECT id, user_id, service_id, booking_date_start, booking_date_end, total_price, status, created_at, updated_at
 		FROM bookings WHERE id = $1`
 
 	err := r.db.QueryRow(query, id).Scan(
-		&booking.ID, &booking.UserID, &booking.ServiceID, &booking.ProviderID,
+		&booking.ID, &booking.UserID, &booking.ServiceID,
 		&booking.BookingDateStart, &booking.BookingDateEnd,
 		&booking.TotalPrice, &booking.Status, &booking.CreatedAt, &booking.UpdatedAt,
 	)

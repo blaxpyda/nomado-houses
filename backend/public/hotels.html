@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Search - Nomado Houses</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="icon" href="images/logo1.jpg">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <a href="/" class="flex items-center space-x-2">
+                        <img src="images/logo1.jpg" height="40" width="40" alt="Nomado Logo" class="rounded-lg shadow-sm">
+                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Nomado</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-600">Hotels & Guesthouses</span>
+                    <a href="/" class="text-blue-600 hover:text-blue-700 font-medium">← Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 mb-8 text-white">
+            <div class="max-w-4xl">travelpayouts api integration
+                <h1 class="text-4xl font-bold mb-4">Find Perfect Hotels & Guesthouses</h1>
+                <p class="text-xl text-blue-100 mb-8">Discover amazing accommodations across Africa and beyond with exclusive deals</p>
+                
+                <!-- Search Form -->
+                <div class="bg-white rounded-2xl p-6 shadow-lg">
+                    <form id="hotelSearchForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Destination</label>
+                            <input type="text" id="destination" name="destination" required
+                                   placeholder="Where are you going?"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Check-in</label>
+                            <input type="date" id="checkIn" name="checkIn" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Check-out</label>
+                            <input type="date" id="checkOut" name="checkOut" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Guests</label>
+                            <select id="adults" name="adults" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900">
+                                <option value="1">1 Adult</option>
+                                <option value="2" selected>2 Adults</option>
+                                <option value="3">3 Adults</option>
+                                <option value="4">4 Adults</option>
+                                <option value="5">5+ Adults</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-4 flex justify-center">
+                            <button type="submit" id="searchButton"
+                                    class="px-8 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-lg hover:from-yellow-500 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50">
+                                <span id="searchButtonText">Search Hotels</span>
+                                <svg id="searchSpinner" class="hidden animate-spin -mr-1 ml-3 h-5 w-5 text-black inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Available Hotels</h2>
+                <div class="flex items-center space-x-4">
+                    <span id="resultsCount" class="text-gray-600"></span>
+                    <select id="sortBy" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option value="price">Sort by Price</option>
+                        <option value="rating">Sort by Rating</option>
+                        <option value="stars">Sort by Stars</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Hotel Results Grid -->
+            <div id="hotelResults" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Hotel cards will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <p class="mt-4 text-gray-600">Searching for the best hotels...</p>
+        </div>
+
+        <!-- No Results State -->
+                <!-- Error/No Results States -->
+        <div id="errorState" class="hidden text-center py-12">
+            <div class="bg-red-50 border border-red-200 rounded-2xl p-8">
+                <div class="text-red-600 text-6xl mb-4">⚠️</div>
+                <h3 class="text-xl font-semibold text-red-800 mb-2">Search Error</h3>
+                <p id="errorMessage" class="text-red-600 mb-4"></p>
+                <button onclick="location.reload()" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    Try Again
+                </button>
+            </div>
+        </div>
+
+        <div id="noResultsState" class="hidden text-center py-12">
+            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-8">
+                <div class="text-gray-400 text-6xl mb-4">🏨</div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">No Hotels Found</h3>
+                <p class="text-gray-600 mb-4">Try adjusting your search criteria or check back later</p>
+                <button onclick="showPopularHotels()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Browse Popular Hotels
+                </button>
+            </div>
+        </div>
+
+        <!-- Popular Hotels Section -->
+        <div id="popularHotelsSection" class="mt-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Popular Destinations</h2>
+            <div id="popularHotels" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Popular hotels will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Set default dates
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            document.getElementById('checkIn').value = today.toISOString().split('T')[0];
+            document.getElementById('checkOut').value = tomorrow.toISOString().split('T')[0];
+            
+            // Load popular hotels on page load
+            loadPopularHotels();
+        });
+
+        const searchForm = document.getElementById('hotelSearchForm');
+        const searchButton = document.getElementById('searchButton');
+        const searchButtonText = document.getElementById('searchButtonText');
+        const searchSpinner = document.getElementById('searchSpinner');
+        const resultsSection = document.getElementById('resultsSection');
+        const hotelResults = document.getElementById('hotelResults');
+        const loadingState = document.getElementById('loadingState');
+        const noResultsState = document.getElementById('noResultsState');
+        const errorState = document.getElementById('errorState');
+        const errorMessage = document.getElementById('errorMessage');
+        const popularHotelsSection = document.getElementById('popularHotelsSection');
+        const popularHotels = document.getElementById('popularHotels');
+        const resultsCount = document.getElementById('resultsCount');
+
+        function setLoading(loading) {
+            searchButton.disabled = loading;
+            if (loading) {
+                searchButtonText.textContent = 'Searching...';
+                searchSpinner.classList.remove('hidden');
+                resultsSection.classList.add('hidden');
+                noResultsState.classList.add('hidden');
+                errorState.classList.add('hidden');
+            } else {
+                searchButtonText.textContent = 'Search Hotels';
+                searchSpinner.classList.add('hidden');
+            }
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorState.classList.remove('hidden');
+            resultsSection.classList.add('hidden');
+            noResultsState.classList.add('hidden');
+        }
+
+        function createHotelCard(hotel) {
+            const starRating = '★'.repeat(hotel.stars) + '☆'.repeat(5 - hotel.stars);
+            
+            return `
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${hotel.imageURL}" alt="${hotel.name}" class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm font-medium">
+                            ${starRating}
+                        </div>
+                        <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                            $${hotel.priceFrom}/night
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">${hotel.name}</h3>
+                        <div class="flex items-center mb-2">
+                            <div class="flex items-center text-yellow-500">
+                                <span class="text-sm font-medium">${hotel.rating}</span>
+                                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-gray-500 text-sm ml-2">Excellent</span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-2">${hotel.description}</p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${hotel.amenities.slice(0, 3).map(amenity => 
+                                `<span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">${amenity}</span>`
+                            ).join('')}
+                            ${hotel.amenities.length > 3 ? `<span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">+${hotel.amenities.length - 3} more</span>` : ''}
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-500">${hotel.address}</div>
+                            <button onclick="bookHotel('${hotel.id}')" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayHotels(hotels) {
+            if (!hotels || hotels.length === 0) {
+                noResultsState.classList.remove('hidden');
+                resultsSection.classList.add('hidden');
+                errorState.classList.add('hidden');
+                return;
+            }
+
+            resultsCount.textContent = `${hotels.length} hotels found`;
+            hotelResults.innerHTML = hotels.map(hotel => createHotelCard(hotel)).join('');
+            resultsSection.classList.remove('hidden');
+            noResultsState.classList.add('hidden');
+            errorState.classList.add('hidden');
+        }
+
+        async function loadPopularHotels() {
+            try {
+                const response = await fetch('/api/hotels/popular/DXB');
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.data.hotels) {
+                        popularHotels.innerHTML = result.data.hotels.map(hotel => createHotelCard(hotel)).join('');
+                    } else {
+                        console.warn('No popular hotels data available');
+                    }
+                } else {
+                    const result = await response.json();
+                    console.error('Popular hotels API error:', result.message);
+                }
+            } catch (error) {
+                console.error('Error loading popular hotels:', error);
+                // Hide popular hotels section if there's an error
+                popularHotelsSection.style.display = 'none';
+            }
+        }
+
+        function showPopularHotels() {
+            popularHotelsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function bookHotel(hotelId) {
+            // Check if user is logged in
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('Please login to book a hotel');
+                window.location.href = '/login';
+                return;
+            }
+            
+            // For now, just show a success message
+            alert('Booking functionality will be implemented soon! Hotel ID: ' + hotelId);
+        }
+
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            setLoading(true);
+
+            const formData = new FormData(searchForm);
+            const searchParams = new URLSearchParams({
+                destination: formData.get('destination'),
+                checkIn: formData.get('checkIn'),
+                checkOut: formData.get('checkOut'),
+                adults: formData.get('adults')
+            });
+
+            try {
+                const response = await fetch(`/api/hotels/search?${searchParams}`);
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        displayHotels(result.data.hotels);
+                    } else {
+                        showError(result.message || 'No hotels found for your search criteria');
+                    }
+                } else {
+                    const result = await response.json();
+                    if (response.status === 429) {
+                        showError('Too many requests. Please wait a moment and try again.');
+                    } else if (response.status === 401) {
+                        showError('API authentication failed. Please contact support.');
+                    } else {
+                        showError(result.message || `Search failed (Error ${response.status})`);
+                    }
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    showError('Network connection error. Please check your internet connection and try again.');
+                } else {
+                    showError('An unexpected error occurred. Please try again later.');
+                }
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Sort functionality
+        document.getElementById('sortBy').addEventListener('change', (e) => {
+            const sortValue = e.target.value;
+            const hotelCards = Array.from(hotelResults.children);
+            
+            // This is a simple client-side sort - in a real app, you'd sort on the server
+            // For now, we'll just show the current results as-is
+            console.log('Sorting by:', sortValue);
+        });
+    </script>
+</body>
+</html>

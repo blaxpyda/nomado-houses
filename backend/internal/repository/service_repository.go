@@ -32,7 +32,7 @@ func NewServiceRepository(db *sql.DB, logger *logger.Logger) ServiceRepository {
 // GetAllServices retrieves all services
 func (r *serviceRepository) GetAllServices() ([]models.Service, error) {
 	query := `
-		SELECT id, provider_id, service_type_id, name, description, price, availability, created_at, updated_at
+		SELECT id, service_type_id, name, description, price, availability, created_at, updated_at
 		FROM services
 		WHERE availability = true
 		ORDER BY name`
@@ -47,7 +47,7 @@ func (r *serviceRepository) GetAllServices() ([]models.Service, error) {
 	for rows.Next() {
 		var service models.Service
 		err := rows.Scan(
-			&service.ID, &service.ProviderID, &service.ServiceTypeID,
+			&service.ID, &service.ServiceTypeID,
 			&service.Name, &service.Description, &service.Price, &service.Availability,
 			&service.CreatedAt, &service.UpdatedAt,
 		)
@@ -63,7 +63,7 @@ func (r *serviceRepository) GetAllServices() ([]models.Service, error) {
 // GetServicesByServiceType retrieves services by service type
 func (r *serviceRepository) GetServicesByServiceType(serviceTypeID int) ([]models.Service, error) {
 	query := `
-		SELECT id, provider_id, service_type_id, name, description, price, availability, created_at, updated_at
+		SELECT id, service_type_id, name, description, price, availability, created_at, updated_at
 		FROM services
 		WHERE service_type_id = $1 AND availability = true
 		ORDER BY name`
@@ -78,7 +78,7 @@ func (r *serviceRepository) GetServicesByServiceType(serviceTypeID int) ([]model
 	for rows.Next() {
 		var service models.Service
 		err := rows.Scan(
-			&service.ID, &service.ProviderID, &service.ServiceTypeID,
+			&service.ID, &service.ServiceTypeID,
 			&service.Name, &service.Description, &service.Price, &service.Availability,
 			&service.CreatedAt, &service.UpdatedAt,
 		)
@@ -94,7 +94,7 @@ func (r *serviceRepository) GetServicesByServiceType(serviceTypeID int) ([]model
 // GetServicesByCategory retrieves services by category name
 func (r *serviceRepository) GetServicesByCategory(category string) ([]models.Service, error) {
 	query := `
-		SELECT s.id, s.provider_id, s.service_type_id, s.name, s.description, s.price, s.availability, s.created_at, s.updated_at
+		SELECT s.id, s.service_type_id, s.name, s.description, s.price, s.availability, s.created_at, s.updated_at
 		FROM services s
 		JOIN service_types st ON s.service_type_id = st.id
 		WHERE st.name = $1 AND s.availability = true
@@ -110,7 +110,7 @@ func (r *serviceRepository) GetServicesByCategory(category string) ([]models.Ser
 	for rows.Next() {
 		var service models.Service
 		err := rows.Scan(
-			&service.ID, &service.ProviderID, &service.ServiceTypeID,
+			&service.ID, &service.ServiceTypeID,
 			&service.Name, &service.Description, &service.Price, &service.Availability,
 			&service.CreatedAt, &service.UpdatedAt,
 		)
@@ -127,11 +127,11 @@ func (r *serviceRepository) GetServicesByCategory(category string) ([]models.Ser
 func (r *serviceRepository) GetServiceByID(id int) (*models.Service, error) {
 	service := &models.Service{}
 	query := `
-		SELECT id, provider_id, service_type_id, name, description, price, availability, created_at, updated_at
+		SELECT id, service_type_id, name, description, price, availability, created_at, updated_at
 		FROM services WHERE id = $1`
 
 	err := r.db.QueryRow(query, id).Scan(
-		&service.ID, &service.ProviderID, &service.ServiceTypeID,
+		&service.ID, &service.ServiceTypeID,
 		&service.Name, &service.Description, &service.Price, &service.Availability,
 		&service.CreatedAt, &service.UpdatedAt,
 	)
@@ -148,11 +148,11 @@ func (r *serviceRepository) GetServiceByID(id int) (*models.Service, error) {
 // CreateService creates a new service
 func (r *serviceRepository) CreateService(service *models.Service) error {
 	query := `
-		INSERT INTO services (provider_id, service_type_id, name, description, price, availability)
-		VALUES ($1, $2, $3, $4, $5, $6)
+		INSERT INTO services (service_type_id, name, description, price, availability)
+		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id, created_at, updated_at`
 
-	err := r.db.QueryRow(query, service.ProviderID, service.ServiceTypeID,
+	err := r.db.QueryRow(query, service.ServiceTypeID,
 		service.Name, service.Description, service.Price, service.Availability).Scan(
 		&service.ID, &service.CreatedAt, &service.UpdatedAt,
 	)
@@ -167,10 +167,10 @@ func (r *serviceRepository) CreateService(service *models.Service) error {
 func (r *serviceRepository) UpdateService(service *models.Service) error {
 	query := `
 		UPDATE services 
-		SET provider_id = $1, service_type_id = $2, name = $3, description = $4, price = $5, availability = $6, updated_at = CURRENT_TIMESTAMP
-		WHERE id = $7`
+		SET service_type_id = $1, name = $2, description = $3, price = $4, availability = $5, updated_at = CURRENT_TIMESTAMP
+		WHERE id = $6`
 
-	_, err := r.db.Exec(query, service.ProviderID, service.ServiceTypeID,
+	_, err := r.db.Exec(query, service.ServiceTypeID,
 		service.Name, service.Description, service.Price, service.Availability, service.ID)
 	if err != nil {
 		return fmt.Errorf("failed to update service: %w", err)

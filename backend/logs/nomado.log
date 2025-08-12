@@ -1,0 +1,13 @@
+ERROR: 2025/08/11 11:43:10 logger.go:35: Failed to get popular hotels: city not found with ID: DXB
+ERROR: 2025/08/11 12:24:07 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 12:24:32 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 12:25:03 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 14:46:58 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 14:47:42 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 14:48:42 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 14:49:10 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 14:49:52 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 14:50:00 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 14:50:16 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 14:50:36 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
+ERROR: 2025/08/11 15:01:43 logger.go:35: Failed to get popular hotels: city not found with ID: DXB

@@ -64,8 +64,14 @@ func (s *authService) Register(req *models.RegisterRequest) (*models.AuthRespons
 		FirstName:        req.FirstName,
 		LastName:         req.LastName,
 		Phone:            req.Phone,
+		Role:             req.Role, // Set role from request
 		EmailVerified:    false,
 		VerificationCode: s.emailService.GenerateVerificationCode(),
+	}
+
+	// Validate role
+	if !user.Role.IsValid() {
+		user.Role = models.RoleUser // Default to user role
 	}
 
 	if err := s.userRepo.CreateUser(user); err != nil {
@@ -150,7 +156,8 @@ func (s *authService) ValidateToken(tokenString string) (int, error) {
 func (s *authService) generateToken(userID int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userID,
-		"exp":     time.Now().Add(time.Hour * 24 * 7).Unix(), // 7 days
+		"iat":     time.Now().Unix(), // Issued at
+		"exp":     time.Now().Add(time.Hour * 1).Unix(), // 1 hour
 	})
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))

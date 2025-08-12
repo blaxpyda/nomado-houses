@@ -101,8 +101,11 @@ export class ServiceTypeItemComponent extends HTMLElement {
         const serviceIcon = this.getServiceIcon(this.serviceType.name);
         const serviceColor = this.getServiceColor(this.serviceType.name);
         
+        // Determine the link URL based on service type
+        const linkUrl = this.getLinkUrl(this.serviceType.name);
+        
         this.innerHTML = `
-            <div class="group cursor-pointer h-full">
+            <div class="group cursor-pointer h-full" onclick="window.location.href='${linkUrl}'">
                 <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 h-full flex flex-col">
                     <div class="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center h-48">
                         <div class="w-20 h-20 bg-gradient-to-br ${serviceColor} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 p-4">
@@ -130,6 +133,38 @@ export class ServiceTypeItemComponent extends HTMLElement {
                 </div>
             </div>
         `;
+    }
+
+    getLinkUrl(serviceName) {
+        const name = serviceName.toLowerCase();
+        
+        if (name.includes('hotel') || name.includes('guesthouse')) {
+            return '/hotels';
+        } else if (name.includes('visa')) {
+            return '/visa-assistance';
+        } else if (name.includes('flight')) {
+            return '/flights';
+        } else if (name.includes('bus')) {
+            return '/bus-travel';
+        } else if (name.includes('car') || name.includes('ride')) {
+            return '/car-rentals';
+        } else if (name.includes('love')) {
+            return '/nomado-love';
+        } else if (name.includes('nomad') || name.includes('little')) {
+            return '/little-nomads';
+        } else if (name.includes('event') || name.includes('retreat')) {
+            return '/events-retreats';
+        } else if (name.includes('job')) {
+            return '/nomado-jobs';
+        } else if (name.includes('shop')) {
+            return '/nomado-shop';
+        } else if (name.includes('lux')) {
+            return '/nomado-lux';
+        } else if (name.includes('forex')) {
+            return '/nomado-forex';
+        } else {
+            return '#'; // Default fallback
+        }
     }
 }
 
