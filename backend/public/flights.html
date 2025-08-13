@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Search - Nomado Houses</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="icon" href="images/logo1.jpg">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 bg-black/20"></div>
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+
+    <!-- Navigation -->
+    <nav class="relative z-10 bg-black/30 backdrop-blur-sm border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <img src="images/logo1.jpg" height="40" width="40" alt="Nomado Logo" class="rounded-lg">
+                        <span class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Nomado</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-white/70 hover:text-white transition-colors duration-200">Home</a>
+                    <a href="/hotels" class="text-white/70 hover:text-white transition-colors duration-200">Hotels</a>
+                    <a href="/flights" class="text-yellow-400 font-medium">Flights</a>
+                    <a href="/login" class="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors duration-200">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="relative z-10 min-h-screen pt-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
+                Find Your Perfect Flight
+            </h1>
+            <p class="text-xl text-gray-300 mb-8">Search and compare flights from around the world</p>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Search Form -->
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl mb-8">
+                <form id="flightSearchForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <!-- Origin -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-white">From</label>
+                        <input type="text" id="origin" name="origin" required
+                               class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-200"
+                               placeholder="Origin city or airport">
+                    </div>
+
+                    <!-- Destination -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-white">To</label>
+                        <input type="text" id="destination" name="destination" required
+                               class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-200"
+                               placeholder="Destination city or airport">
+                    </div>
+
+                    <!-- Departure Date -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-white">Departure</label>
+                        <input type="date" id="departDate" name="depart_date" required
+                               class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-200">
+                    </div>
+
+                    <!-- Return Date -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-white">Return (Optional)</label>
+                        <input type="date" id="returnDate" name="return_date"
+                               class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white backdrop-blur-sm focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-200">
+                    </div>
+
+                    <!-- Search Button -->
+                    <div class="flex items-end">
+                        <button type="submit" id="searchButton"
+                                class="w-full py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                            <span id="searchButtonText">Search Flights</span>
+                            <svg id="searchSpinner" class="hidden animate-spin -mr-1 ml-3 h-5 w-5 text-black inline" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Popular Routes -->
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl mb-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Popular Routes</h2>
+                <div id="popularRoutesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Popular routes will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="hidden bg-red-500/20 backdrop-blur-sm border border-red-500/30 rounded-xl p-4 mb-6">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-red-200 font-medium" id="errorText"></p>
+                </div>
+            </div>
+
+            <!-- Results Container -->
+            <div id="resultsContainer" class="hidden">
+                <h2 class="text-2xl font-bold text-white mb-6">Flight Results</h2>
+                <div id="flightResults" class="space-y-4">
+                    <!-- Flight results will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="hidden text-center py-12">
+                <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-yellow-500 hover:bg-yellow-600 transition ease-in-out duration-150">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Searching for flights...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const flightSearchForm = document.getElementById('flightSearchForm');
+        const searchButton = document.getElementById('searchButton');
+        const searchButtonText = document.getElementById('searchButtonText');
+        const searchSpinner = document.getElementById('searchSpinner');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const flightResults = document.getElementById('flightResults');
+        const loadingState = document.getElementById('loadingState');
+        const popularRoutesContainer = document.getElementById('popularRoutesContainer');
+
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('departDate').setAttribute('min', today);
+        document.getElementById('returnDate').setAttribute('min', today);
+
+        // Load popular routes on page load
+        document.addEventListener('DOMContentLoaded', loadPopularRoutes);
+
+        // Flight search form submission
+        flightSearchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideError();
+            setLoading(true);
+
+            const formData = new FormData(flightSearchForm);
+            const searchParams = new URLSearchParams();
+
+            // Add form data to search params
+            for (let [key, value] of formData.entries()) {
+                if (value) {
+                    searchParams.append(key, value);
+                }
+            }
+
+            try {
+                const response = await fetch(`/api/flights/search?${searchParams}`);
+                const data = await response.json();
+
+                console.log('Full API response:', data);
+
+                if (response.ok && data.success && data.data && data.data.flights) {
+                    console.log('Flights data:', data.data.flights);
+                    displayFlights(data.data.flights);
+                } else {
+                    console.log('API response not successful:', data);
+                    showError(data.message || data.error || 'Failed to search flights');
+                }
+            } catch (error) {
+                console.error('Flight search error:', error);
+                showError('Network error. Please check your connection and try again.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Load popular routes
+        async function loadPopularRoutes() {
+            try {
+                const response = await fetch('/api/flights/popular-routes');
+                const data = await response.json();
+
+                if (response.ok && data.data) {
+                    displayPopularRoutes(data.data);
+                }
+            } catch (error) {
+                console.error('Failed to load popular routes:', error);
+            }
+        }
+
+        // Display popular routes
+        function displayPopularRoutes(routes) {
+            popularRoutesContainer.innerHTML = routes.map(route => `
+                <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30 hover:bg-white/30 transition-all duration-200 cursor-pointer"
+                     onclick="fillRoute('${route.origin_code}', '${route.dest_code}')">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-white font-semibold">${route.origin} → ${route.destination}</h3>
+                        <span class="text-yellow-400 text-sm">★ ${route.popularity}%</span>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-2">${route.route}</p>
+                    <p class="text-yellow-400 font-bold">From $${route.avg_price}</p>
+                </div>
+            `).join('');
+        }
+
+        // Fill route in search form
+        function fillRoute(origin, destination) {
+            document.getElementById('origin').value = origin;
+            document.getElementById('destination').value = destination;
+        }
+
+        // Display flight results
+        function displayFlights(flights) {
+            console.log('displayFlights called with:', flights);
+            console.log('flights is array:', Array.isArray(flights));
+            console.log('flights length:', flights ? flights.length : 'flights is null/undefined');
+            
+            if (!flights || flights.length === 0) {
+                flightResults.innerHTML = '<p class="text-gray-300 text-center py-8">No flights found for your search criteria.</p>';
+            } else {
+                console.log('First flight object:', flights[0]);
+                flightResults.innerHTML = flights.map(flight => `
+                    <div class="bg-white/20 backdrop-blur-sm rounded-xl p-6 border border-white/30">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-white font-bold text-lg">${flight.origin} → ${flight.destination}</h3>
+                                <p class="text-gray-300">${flight.airline || 'Multiple Airlines'}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-yellow-400 font-bold text-2xl">$${flight.price}</p>
+                                <p class="text-gray-300 text-sm">${flight.currency}</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <p class="text-gray-400 text-sm">Departure</p>
+                                <p class="text-white">${formatDate(flight.depart_date)}</p>
+                            </div>
+                            ${flight.return_date ? `
+                                <div>
+                                    <p class="text-gray-400 text-sm">Return</p>
+                                    <p class="text-white">${formatDate(flight.return_date)}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <button class="w-full py-2 bg-yellow-500 text-black font-medium rounded-lg hover:bg-yellow-600 transition-colors duration-200">
+                            Select Flight
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            resultsContainer.classList.remove('hidden');
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Helper functions
+        function setLoading(loading) {
+            if (loading) {
+                searchButton.disabled = true;
+                searchButtonText.textContent = 'Searching...';
+                searchSpinner.classList.remove('hidden');
+                loadingState.classList.remove('hidden');
+                resultsContainer.classList.add('hidden');
+            } else {
+                searchButton.disabled = false;
+                searchButtonText.textContent = 'Search Flights';
+                searchSpinner.classList.add('hidden');
+                loadingState.classList.add('hidden');
+            }
+        }
+
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+            errorMessage.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hideError() {
+            errorMessage.classList.add('hidden');
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+    </script>
+</body>
+</html>

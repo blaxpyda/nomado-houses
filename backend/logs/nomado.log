@@ -11,3 +11,10 @@ ERROR: 2025/08/11 14:50:00 logger.go:35: Failed to get service types: failed to 
 ERROR: 2025/08/11 14:50:16 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
 ERROR: 2025/08/11 14:50:36 logger.go:35: Failed to get service types: failed to get service types: dial tcp 85.9.202.82:27796: connect: connection refused
 ERROR: 2025/08/11 15:01:43 logger.go:35: Failed to get popular hotels: city not found with ID: DXB
+ERROR: 2025/08/13 14:57:24 logger.go:35: Failed to search flights: %v: failed to fetch flights: 404 Not Found
+ERROR: 2025/08/13 14:59:24 logger.go:35: Failed to search flights: %v: failed to fetch flights: 404 Not Found
+ERROR: 2025/08/13 15:10:05 logger.go:35: Failed to search flights: %v: failed to fetch flights: 404 Not Found
+ERROR: 2025/08/13 15:16:19 logger.go:35: Failed to search flights: %v: failed to fetch flights: 400 Bad Request
+ERROR: 2025/08/13 15:21:13 logger.go:35: Failed to search flights: %v: failed to fetch flights: 400 Bad Request
+ERROR: 2025/08/13 15:28:45 logger.go:35: Failed to search flights: %v: failed to fetch flights: 400 Bad Request
+ERROR: 2025/08/13 15:38:54 logger.go:35: Failed to search flights: %v: failed to decode response body: json: cannot unmarshal object into Go struct field .data of type []struct { ID string "json:\"id\""; Origin string "json:\"origin\""; Destination string "json:\"destination\""; DepartDate string "json:\"depart_date\""; ReturnDate string "json:\"return_date\""; Price float64 "json:\"price\""; Currency string "json:\"currency\""; Airline string "json:\"airline\"" }

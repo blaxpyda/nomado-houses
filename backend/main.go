@@ -63,14 +63,6 @@ func main() {
 	}
 	defer database.CloseDB()
 
-	// // Create tables and seed data
-	// if err := database.CreateTables(); err != nil {
-	// 	log.Printf("Warning: Failed to create tables: %v", err)
-	// }
-	// if err := database.SeedData(); err != nil {
-	// 	log.Printf("Warning: Failed to seed data: %v", err)
-	// }
-
 	// Initialize repositories
 	userRepo := repository.NewUserRepository(database.DB, logInstance)
 	destinationRepo := repository.NewDestinationRepository(database.DB, logInstance)
@@ -97,7 +89,8 @@ func main() {
 	serviceHandler := appHandlers.NewServiceHandler(serviceService, logInstance)
 	serviceTypeHandler := appHandlers.NewServiceTypeHandler(serviceTypeService, logInstance)
 	bookingHandler := appHandlers.NewBookingHandler(bookingService, logInstance)
-	hotelHandler := appHandlers.NewHotelHandler(travelPayoutsService, logInstance)
+	// hotelHandler := appHandlers.NewHotelHandler(travelPayoutsService, logInstance)
+	flightHandler := appHandlers.NewFlightHandler(travelPayoutsService, logInstance)
 
 	// Setup routes
 	r := mux.NewRouter()
@@ -117,10 +110,15 @@ func main() {
 	api.HandleFunc("/service-types", serviceTypeHandler.GetAllServiceTypes).Methods("GET")
 	api.HandleFunc("/service-types/{id}", serviceTypeHandler.GetServiceTypeByID).Methods("GET")
 
-	// Hotel routes
-	api.HandleFunc("/hotels/search", hotelHandler.SearchHotels).Methods("GET")
-	api.HandleFunc("/hotels/popular/{cityId}", hotelHandler.GetPopularHotels).Methods("GET")
-	api.HandleFunc("/hotels/destinations", hotelHandler.GetDestinations).Methods("GET")
+	// // Hotel routes
+	// api.HandleFunc("/hotels/search", hotelHandler.SearchHotels).Methods("GET")
+	// api.HandleFunc("/hotels/popular/{cityId}", hotelHandler.GetPopularHotels).Methods("GET")
+	// api.HandleFunc("/hotels/destinations", hotelHandler.GetDestinations).Methods("GET")
+
+	// Flight routes
+	api.HandleFunc("/flights/search", flightHandler.SearchFlights).Methods("GET")
+	api.HandleFunc("/flights/popular-routes", flightHandler.GetPopularRoutes).Methods("GET")
+	api.HandleFunc("/flights/airports", flightHandler.GetAirports).Methods("GET")
 
 	// Protected routes (any authenticated user)
 	protected := api.PathPrefix("").Subrouter()
@@ -179,8 +177,11 @@ func main() {
 	r.HandleFunc("/verify-email", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./public/verify-email.html")
 	})
-	r.HandleFunc("/hotels", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./public/hotels.html")
+	// r.HandleFunc("/hotels", func(w http.ResponseWriter, r *http.Request) {
+	// 	http.ServeFile(w, r, "./public/hotels.html")
+	// })
+	r.HandleFunc("/flights", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./public/flights.html")
 	})
 
 	// Serve static files
